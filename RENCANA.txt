@@ -1,0 +1,17 @@
+Beberapa ide dalam FINAL PROJECT
+1. APLIKASI KASIR
+2. APLIKASI GUDANG
+3. APLIKASI SHOWROOM MOBIL
+
+Jika ada ide lain bisa ditambahkan karena belum FIX.
+
+RENCANA FITUR YANG AKAN ADA DALAM APLIKASI
+1. INSERT DATA
+2. DELETE DATA
+3. SHOW DATA
+    - ASCENDING
+    - DESCENDING
+4. UPDATE DATA
+5. TRANSAKSI
+
+Untuk fitur bisa ditambahkan karena belum FIX.
