@@ -1,11 +1,32 @@
-#include "functions.h"
-#include <string>
+#include <iostream>
+#include <iomanip>
+#include <conio.h>
+#include <Windows.h>
+
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+COORD CursorPosition;
 
 void draw();
+void gotoxy(int x, int y);
+void gotoxy(int x, int y, std::string text);
 
 int main() {
+    system("cls");
     draw();
     return 0;
+}
+
+void gotoxy(int x, int y){
+    CursorPosition.X = x;
+    CursorPosition.Y = y;
+    SetConsoleCursorPosition(console,CursorPosition);
+}
+
+void gotoxy(int x, int y, std::string text){
+    CursorPosition.X = x;
+    CursorPosition.Y = y;
+    SetConsoleCursorPosition(console,CursorPosition);
+    std::cout << text;
 }
 
 void draw(){
@@ -23,17 +44,57 @@ void draw(){
     cr  = '\xB9' ; //connector-right
     c   = '\xCE' ; //cross
 
-    std::cout << "top - left         : " << tl << std::endl << std::endl;
-    std::cout << "top - right        : " << tr << std::endl << std::endl;
-    std::cout << "bottom - left      : " << bl << std::endl << std::endl;
-    std::cout << "bottom - right     : " << br << std::endl << std::endl;
-    std::cout << "vertical - line    : " << ver << std::endl << std::endl;
-    std::cout << "horizontal - line  : " << hor << std::endl << std::endl;
-    std::cout << "connector - top    : " << ct << std::endl << std::endl;
-    std::cout << "connector - bottom : " << cb << std::endl << std::endl;
-    std::cout << "connector - left   : " << cl << std::endl << std::endl;
-    std::cout << "connector - right  : " << cr << std::endl << std::endl;
-    std::cout << "cross              : " << c << std::endl << std::endl;
+    // std::cout << "top - left         : " << tl << std::endl << std::endl;
+    // std::cout << "top - right        : " << tr << std::endl << std::endl;
+    // std::cout << "bottom - left      : " << bl << std::endl << std::endl;
+    // std::cout << "bottom - right     : " << br << std::endl << std::endl;
+    // std::cout << "vertical - line    : " << ver << std::endl << std::endl;
+    // std::cout << "horizontal - line  : " << hor << std::endl << std::endl;
+    // std::cout << "connector - top    : " << ct << std::endl << std::endl;
+    // std::cout << "connector - bottom : " << cb << std::endl << std::endl;
+    // std::cout << "connector - left   : " << cl << std::endl << std::endl;
+    // std::cout << "connector - right  : " << cr << std::endl << std::endl;
+    // std::cout << "cross              : " << c << std::endl << std::endl;
 
-    
+    std::string line(74, hor);
+
+    gotoxy(2,1);
+    std::cout << tl << line << tr; //for the top line
+    //vertical-line in the left and right of the box
+    for(a=1; a<22; a++){
+        gotoxy(2,a+1);
+        std::cout << ver;
+        gotoxy(77, a+1);
+        std::cout << ver;
+    }
+
+    gotoxy(2,23);
+    std::cout << bl << line << br; //for the bottom line
+    gotoxy(2,5);
+    std::cout << cl << line << cr;
+    gotoxy(2,21);
+    std::cout << cl << line << cr;
+
+    // gotoxy(2,3);
+    // std::cout << cl << line << cr;
+    // //
+    // // gotoxy(9,3);
+    // std::cout << ct;
+    // gotoxy(9,4);
+    // std::cout << ver;
+    // gotoxy(9,5);
+    // std::cout << cb;
+    // //
+    // gotoxy(42, 3);
+    // std::cout << ct;
+    // gotoxy(42, 4);
+    // std::cout << ver;
+    // gotoxy(42, 5);
+    // std::cout << cb;
+
+    // //
+    // gotoxy()
+
+
+
 }
