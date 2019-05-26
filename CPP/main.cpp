@@ -12,9 +12,21 @@ void gotoxy(int x, int y, std::string text);
 
 int main() {
     system("cls");
+    int a;
     draw();
+    gotoxy(31,3); std::cout << "SUM-SUM STORE";
+    gotoxy(4,6); std::cout << "SELAMAT DATANG";
+    gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
+    gotoxy(5,10); std::cout << "1. Manage Data";
+    gotoxy(5,11); std::cout << "2. Show Data";
+    gotoxy(5,12); std::cout << "3. Transaction";
+    gotoxy(5,13); std::cout << "9. EXIT";
+    gotoxy(4,20); std::cout << "Masukkan pilihan anda :";
+    gotoxy(4,22); std::cout << "> "; std::cin>>a;
     return 0;
 }
+
+
 
 void gotoxy(int x, int y){
     CursorPosition.X = x;
