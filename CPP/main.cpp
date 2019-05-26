@@ -1,11 +1,13 @@
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include <conio.h>
 #include <Windows.h>
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
+void login();
 void draw();
 void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
@@ -13,6 +15,8 @@ void gotoxy(int x, int y, std::string text);
 int main() {
     system("cls");
     int a;
+    login();
+    system("cls");
     draw();
     gotoxy(31,3); std::cout << "SUM-SUM STORE";
     gotoxy(4,6); std::cout << "SELAMAT DATANG";
@@ -26,7 +30,38 @@ int main() {
     return 0;
 }
 
+void login(){
+    system("cls");
+    std::string username;
+    std::string password;
+    char ch;
+    while(true){
+        system("cls");
+        password="";
+        gotoxy(10,10); std::cout << "Enter Username : ";
+        std::cin >> username;
+        if(username == "")
+            break;
+        
+        gotoxy(10,11); std::cout << "Enter Password : ";
+        ch=_getch();
+        while(ch != 13){
+            password.push_back(ch);
+            std::cout << "*";
+            ch=_getch();
+        }
 
+        if(username == "admin" && password == "admin"){
+            gotoxy(10, 14); std::cout << "Access Granted :P";
+            gotoxy(10,15); std::cout << "Press Enter to continue.....";
+            getch();
+            break;
+        } else {
+            gotoxy(10,14); std::cout << "Access Aborted, Please Try Again";
+            getch();
+        }
+    }
+}
 
 void gotoxy(int x, int y){
     CursorPosition.X = x;
