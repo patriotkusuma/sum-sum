@@ -12,6 +12,7 @@ void draw();
 void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
 
+
 int main() {
     system("cls");
     int a;
@@ -90,18 +91,6 @@ void draw(){
     cl  = '\xCC' ; //connector-left
     cr  = '\xB9' ; //connector-right
     c   = '\xCE' ; //cross
-
-    // std::cout << "top - left         : " << tl << std::endl << std::endl;
-    // std::cout << "top - right        : " << tr << std::endl << std::endl;
-    // std::cout << "bottom - left      : " << bl << std::endl << std::endl;
-    // std::cout << "bottom - right     : " << br << std::endl << std::endl;
-    // std::cout << "vertical - line    : " << ver << std::endl << std::endl;
-    // std::cout << "horizontal - line  : " << hor << std::endl << std::endl;
-    // std::cout << "connector - top    : " << ct << std::endl << std::endl;
-    // std::cout << "connector - bottom : " << cb << std::endl << std::endl;
-    // std::cout << "connector - left   : " << cl << std::endl << std::endl;
-    // std::cout << "connector - right  : " << cr << std::endl << std::endl;
-    // std::cout << "cross              : " << c << std::endl << std::endl;
 
     std::string line(74, hor);
 
