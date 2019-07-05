@@ -3,6 +3,7 @@
 #include <string>
 #include <conio.h>
 #include <Windows.h>
+#include <cstdlib>
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
@@ -11,26 +12,79 @@ void login();
 void draw();
 void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
-
+void ManageData();
+void MenuAwal();
+void Exit();
 
 int main() {
     system("cls");
-    int a;
     login();
+    MenuAwal();
+    return 0;
+}
+
+void MenuAwal(){
+    int a;
     system("cls");
     draw();
-    gotoxy(31,3); std::cout << "SUM-SUM STORE";
+    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
     gotoxy(4,6); std::cout << "SELAMAT DATANG";
     gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
     gotoxy(5,10); std::cout << "1. Manage Data";
     gotoxy(5,11); std::cout << "2. Show Data";
-    gotoxy(5,12); std::cout << "3. Transaction";
-    gotoxy(5,13); std::cout << "9. EXIT";
+    gotoxy(5,12); std::cout << "3. Search Data";
+    gotoxy(5,13); std::cout << "4. Transaction";
+    gotoxy(5,14); std::cout << "9. EXIT";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda :";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
-    return 0;
+    switch(a){
+        case 1:
+            ManageData();
+            break;
+        case 9:
+            Exit();
+            break;
+    }
 }
-
+void Exit(){
+    system("cls");
+    draw();
+    char a;
+    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+    gotoxy(4,6); std::cout << "GOOD BYE";
+    gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
+    std::cin >>a;
+    if(a=='y'||a=='Y'){
+        exit();
+    }
+    else if(a=='t'||a=='T'){
+        MenuAwal();
+    }
+}
+void ManageData(){
+    system("cls");
+    int a;
+    draw();
+    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+    gotoxy(4,6); std::cout <<"MANAGE DATA";
+    gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
+    gotoxy(5,10); std::cout << "1. Tambah Data";
+    gotoxy(5,11); std::cout << "2. Lihat Data";
+    gotoxy(5,12); std::cout << "3. Update Data";
+    gotoxy(5,13); std::cout << "4. Delete Data";
+    gotoxy(5,14); std::cout << "5. Kembali";
+    gotoxy(4,20); std::cout << "Masukkan pilihan anda : ";
+    gotoxy(4,22); std::cout << "> "; std::cin>>a;
+    switch (a)
+    {
+    case 5:
+        MenuAwal();
+        break;
+    
+    default:
+        break;
+    }
+}
 void login(){
     system("cls");
     std::string username;
