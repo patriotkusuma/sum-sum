@@ -9,12 +9,15 @@ HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
 void login();
+void Tittle();
 void draw();
 void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
 void ManageData();
 void MenuAwal();
 void Exit();
+void ShowData(); //belum selesai
+void SearchData();
 
 int main() {
     system("cls");
@@ -41,10 +44,45 @@ void MenuAwal(){
         case 1:
             ManageData();
             break;
+        case 2:
+            ShowData();
+            break;
+        case 3:
+            SearchData();
+            break;
         case 9:
             Exit();
             break;
     }
+}
+
+void Tittle(){
+    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+}
+
+void SearchData(){
+    while(1){
+        system("cls");
+        std::string ID;
+        draw();
+        Tittle();
+        gotoxy(4,6); std::cout << "MENU SEARCH DATA";
+        gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
+        gotoxy(4,20); std::cout << "Masukkan ID dibawah ini :";
+        gotoxy(4,22); std::cin >> ID;
+        gotoxy(4,8); std::cout << ID.length();
+        if(ID.length()>5){
+            gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+        } else if (ID.length()<5){
+            gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+        }
+        gotoxy(4,22); system("pause");
+    }
+}
+
+void ShowData(){
+    system("cls");
+    draw();
 }
 void Exit(){
     system("cls");
@@ -53,14 +91,15 @@ void Exit(){
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
     gotoxy(4,6); std::cout << "GOOD BYE";
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
-    std::cin >>a;
-    if(a=='y'||a=='Y'){
-        exit();
-    }
-    else if(a=='t'||a=='T'){
+    gotoxy(4,22); std::cout << "> "; std::cin >>a;
+    // if(a=='y'||a=='Y'){
+        
+    // }
+    if(a=='t'||a=='T'){
         MenuAwal();
     }
 }
+
 void ManageData(){
     system("cls");
     int a;
@@ -85,6 +124,7 @@ void ManageData(){
         break;
     }
 }
+
 void login(){
     system("cls");
     std::string username;
