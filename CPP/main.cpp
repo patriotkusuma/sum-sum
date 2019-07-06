@@ -73,7 +73,7 @@ void TambahData(){
     gotoxy(6,13); std::cout << "Harga         : "; 
     gotoxy(22,9); std::cin>>ID;
         if(ID==""){
-            gotoxy(6,10); std::cout << "Harap Masukkan ID";
+            gotoxy(6,10); std::coxut << "Harap Masukkan ID";
             goto awal;
         } 
     gotoxy(22,10); std::cin >> Nama;
