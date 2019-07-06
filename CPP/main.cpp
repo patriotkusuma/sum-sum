@@ -135,6 +135,7 @@ void ShowData(){
     draw();
 
 }
+
 void Exit(){
     system("cls");
     draw();
@@ -277,7 +278,4 @@ void draw(){
 
     // //
     // gotoxy()
-
-
-
 }
