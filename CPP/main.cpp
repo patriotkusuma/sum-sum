@@ -74,7 +74,6 @@ void TambahData(){
     gotoxy(22,9); std::cin>>ID;
         if(ID==""){
             gotoxy(6,10); std::cout << "Harap Masukkan ID";
-            getch();
             goto awal;
         } 
     gotoxy(22,10); std::cin >> Nama;
