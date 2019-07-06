@@ -18,6 +18,7 @@ void MenuAwal();
 void Exit();
 void ShowData(); //belum selesai
 void SearchData();
+void TambahData();
 
 int main() {
     system("cls");
@@ -56,6 +57,50 @@ void MenuAwal(){
     }
 }
 
+void TambahData(){
+    awal:
+    system("cls");
+    std::string ID,Nama,Brand,TahunTerbit, Harga;
+    char pilihan;
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU TAMBAH DATA";
+    gotoxy(4,7); std::cout << "Masukkan Data sesuai Ketentuan di Bawah ini.";
+    gotoxy(6,9); std::cout << "ID            : "; 
+    gotoxy(6,10); std::cout << "Nama          : "; 
+    gotoxy(6,11); std::cout << "Brand         : "; 
+    gotoxy(6,12); std::cout << "Tahun Terbit  : "; 
+    gotoxy(6,13); std::cout << "Harga         : "; 
+    gotoxy(22,9); std::cin>>ID;
+        if(ID==""){
+            gotoxy(6,10); std::cout << "Harap Masukkan ID";
+            getch();
+            goto awal;
+        } 
+    gotoxy(22,10); std::cin >> Nama;
+        if(Nama==""){
+            gotoxy(6,11); std::cout << "Harap Masukkan Nama";
+            goto awal;
+        }
+    gotoxy(22,11); std::cin>> Brand;
+        if(Brand==""){
+            std::cout << "Harap Masukkan Brand";
+        }
+    gotoxy(22,12); std::cin >> TahunTerbit;
+        if(TahunTerbit==""){
+            std::cout << "Harap Masukkan Tahun Terbit";
+        }
+    gotoxy(22,13); std::cin >> Harga;
+        if(Harga==""){
+            std::cout << "Harap Masukkan Harga";
+        }
+    gotoxy(4,20); std::cout << "Apakah anda yakin ingin menyimpan?(Y/T)";
+    gotoxy(4,22);std::cin >> pilihan;
+    if(pilihan=='t'||'T'){
+        ManageData();
+    }
+}
+
 void Tittle(){
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
 }
@@ -68,13 +113,18 @@ void SearchData(){
         Tittle();
         gotoxy(4,6); std::cout << "MENU SEARCH DATA";
         gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
-        gotoxy(4,20); std::cout << "Masukkan ID dibawah ini :";
+        gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+        gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
         gotoxy(4,22); std::cin >> ID;
         gotoxy(4,8); std::cout << ID.length();
         if(ID.length()>5){
             gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
-        } else if (ID.length()<5){
-            gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+        } 
+        // else if (ID.length()<5){
+        //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+        // }
+         else if (ID == "B" || ID == "b"){
+            MenuAwal();
         }
         gotoxy(4,22); system("pause");
     }
@@ -83,17 +133,18 @@ void SearchData(){
 void ShowData(){
     system("cls");
     draw();
+
 }
 void Exit(){
     system("cls");
     draw();
     char a;
-    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+    Tittle();
     gotoxy(4,6); std::cout << "GOOD BYE";
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
     gotoxy(4,22); std::cout << "> "; std::cin >>a;
     // if(a=='y'||a=='Y'){
-        
+    //     break;   
     // }
     if(a=='t'||a=='T'){
         MenuAwal();
@@ -104,7 +155,7 @@ void ManageData(){
     system("cls");
     int a;
     draw();
-    gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+    Tittle();
     gotoxy(4,6); std::cout <<"MANAGE DATA";
     gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
     gotoxy(5,10); std::cout << "1. Tambah Data";
@@ -116,6 +167,8 @@ void ManageData(){
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
     switch (a)
     {
+    case 1:
+        TambahData();
     case 5:
         MenuAwal();
         break;
