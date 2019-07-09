@@ -4,16 +4,17 @@
 #include <conio.h>
 #include <Windows.h>
 #include <cstdlib>
-#define MAX 50
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
 typedef struct{
-    char data[MAX][30];
+    int base[100];
+    char base1[100][30];
     int head, tail;
 }queue;
 queue antrian;
+queue nama_pengantri;
 
 // typedef struct data{
 //     int ID;
@@ -41,7 +42,7 @@ void init(){
 }
 
 int isFull(){
-    if(antrian.tail == MAX-1){
+    if(antrian.tail == 100){
         return 1;
     } else {
         return 0;
@@ -57,31 +58,61 @@ int isEmpty(){
     }
 }
 
-void inQueue(char d[MAX]){
-    antrian.head = 0;
-    antrian.tail ++;
-    strcpy(antrian.data[antrian.tail],d);
+char base1[30];
+int base;
+void inQueue(int base, char base1[30]){
+    if(isEmpty() == 1){
+        antrian.head = antrian.tail = 0;
+        nama_pengantri.head = nama_pengantri.tail = 0;
+        antrian.base[antrian.tail] = base;
+        for(int i = 0; i<30; i++){
+            nama_pengantri.base1[nama_pengantri.tail][i] = base1[i];
+        }
+        gotoxy(4,18); std::cout << "Silakan Menunggu Panggilan";
+    } else if(isFull() == 0){
+        antrian.tail++; 
+        nama_pengantri.tail++;
+        antrian.base[antrian.tail] = base;
+        for(int i = 0; i < 30; i++){
+            nama_pengantri.base1[nama_pengantri.tail][i]= base1[i];
+        }
+        gotoxy(4,18); std::cout << "Silakan Menunggu Panggilan";
+    }
 }
 
-void deQueue(){
-    gotoxy(5,10); std::cout << "Data Diambil" << " "<<antrian.data[antrian.head];
-    for(int i = antrian.head; i < antrian.tail; i++){
-        strcpy(antrian.data[i],antrian.data[i+1]);
+int deQueue(){
+    if(isEmpty() == 0){
+        int i, e;
+        char a[30];
+        e = antrian.base[antrian.head];
+        for(i=0; i< 30; i++){
+            a[i]=nama_pengantri.base1[nama_pengantri.head][i];
+        }
+
+        for(i=antrian.head; i<antrian.tail;i++){
+            antrian.base[i] = antrian.base[i+1];
+            for( int j=0; j<30; j++){
+                nama_pengantri.base1[i][j]=nama_pengantri.base1[i][j];
+            }
+        }
+
         antrian.tail--;
+        nama_pengantri.tail--;
+        printf("Antrian dengan No %i dengan nama %s Silakan Masuk", e,a);
+        std::cout << e;
+        std::cout << a;
+        return e;
+        return a[30];
+    } else {
+        gotoxy(5,8); std::cout << "Antrian Kosong";
     }
 }
 
-void clear(){
-    antrian.head=antrian.tail =-1;
-    gotoxy(5,10); std::cout << "Semua Dat Sudah Terhapus";
+void buat(){
+    antrian.head=antrian.tail=-1;
+    nama_pengantri.head=nama_pengantri.tail=-1;
 }
 
-void print(){
-    for(int i=0; i<=antrian.tail; i++){
-        gotoxy(5,10 + i);std::cout <<"Antrian ke - " << i+1;
-        gotoxy(18,10 +i); std::cout <<antrian.data[i]; 
-    }
-}
 
 
 int main() {
@@ -133,6 +164,8 @@ void ManageAntrian(){
     int pilihan;
     char value[30];
     char kembali;
+    int n;
+    n=1;
     ManageAntrianAwal:
     system("cls");
     draw();
@@ -155,36 +188,38 @@ void ManageAntrian(){
                 Tittle();
                 gotoxy(4,6); std::cout << "Registrasi Antrian";
                 gotoxy(4,7); std::cout << "Silakan Masukkan Data";
-                gotoxy(5,10); std::cout << "Nama : "; std::cin >> value;
-                inQueue(value);
-            } else {
-                system("cls");
-                draw();
-                Tittle();
-                gotoxy(4,6); std::cout << "Registrasi Antrian";
-                gotoxy(4,7); std::cout << "Silakan Masukkan Data";
-                gotoxy(4,10); std::cout << "Data Sudah Penuh";
-                
-            }
-                gotoxy(4,19); std::cout << "Data Antrian Sudah Tersimpan";
-                gotoxy(4,20); std::cout << "Masukan b/B untuk kembali";
-                gotoxy(4,22); std::cout << "> "; std::cin >> kembali;
-                if(kembali == 'b' || 'B'){
-                    goto ManageAntrianAwal;
-                } else {
-                    MenuAwal();
-                }
+                gotoxy(5,10); std::cout << "Nomor Registrasi Anda adalah :" << n;
+                base = n;
+                gotoxy(5,11); std::cout << "Nama : ";std::cin >>base1;
+                n++;
+                getchar();
+                gotoxy(4,19); std::cout <<"Data Antrian Sudah Tersimpan";
+                gotoxy(4,20); std::cout << "Tekan Enter Untuk Kembali";
+                gotoxy(4,22); std::cout << "> "; getchar();
+                inQueue(base, base1);
+                goto ManageAntrianAwal;
+            } 
             break;
-        case 2:
-        
-        case 3: 
+        case 2: //Panggil Antrian
+            system("cls");
+            draw();
+            Tittle;
+            gotoxy(4,6); std::cout << "Panggil Antrian";
+            deQueue();
+            getchar();
+            gotoxy(4,20); std::cout << "Tekan Enter Untuk Kembali";
+            gotoxy(4,22); std::cout << "> "; getchar();
+            goto ManageAntrianAwal;
+            break;
+
+        case 3: //Daftar Antrian
             if(isEmpty() != 1){
                 system("cls");
                 draw();
                 Tittle();
-                gotoxy(4,6); "Daftar Antrian";
+                gotoxy(4,6); std::cout<< "Daftar Antrian";
                 gotoxy(5,7);
-                print();
+                // print();
             } else {
                 system("cls");
             }
