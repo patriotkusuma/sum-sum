@@ -4,9 +4,24 @@
 #include <conio.h>
 #include <Windows.h>
 #include <cstdlib>
+#define MAX 50
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
+
+typedef struct{
+    char data[MAX][30];
+    int head, tail;
+}queue;
+queue antrian;
+
+// typedef struct data{
+//     int ID;
+//     std::string Nama;
+//     std::string Brand;
+//     int Tahun;
+//     double Harga;
+// };
 
 void login();
 void Tittle();
@@ -19,6 +34,55 @@ void Exit();
 void ShowData(); //belum selesai
 void SearchData();
 void TambahData();
+void ManageAntrian();
+
+void init(){
+    antrian.head = antrian.tail = -1;
+}
+
+int isFull(){
+    if(antrian.tail == MAX-1){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int isEmpty(){
+    if(antrian.tail == -1){
+        antrian.head = -1;
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void inQueue(char d[MAX]){
+    antrian.head = 0;
+    antrian.tail ++;
+    strcpy(antrian.data[antrian.tail],d);
+}
+
+void deQueue(){
+    gotoxy(5,10); std::cout << "Data Diambil" << " "<<antrian.data[antrian.head];
+    for(int i = antrian.head; i < antrian.tail; i++){
+        strcpy(antrian.data[i],antrian.data[i+1]);
+        antrian.tail--;
+    }
+}
+
+void clear(){
+    antrian.head=antrian.tail =-1;
+    gotoxy(5,10); std::cout << "Semua Dat Sudah Terhapus";
+}
+
+void print(){
+    for(int i=0; i<=antrian.tail; i++){
+        gotoxy(5,10 + i);std::cout <<"Antrian ke - " << i+1;
+        gotoxy(18,10 +i); std::cout <<antrian.data[i]; 
+    }
+}
+
 
 int main() {
     system("cls");
@@ -27,6 +91,10 @@ int main() {
     return 0;
 }
 
+
+
+
+
 void MenuAwal(){
     int a;
     system("cls");
@@ -34,21 +102,24 @@ void MenuAwal(){
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
     gotoxy(4,6); std::cout << "SELAMAT DATANG";
     gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
-    gotoxy(5,10); std::cout << "1. Manage Data";
-    gotoxy(5,11); std::cout << "2. Show Data";
-    gotoxy(5,12); std::cout << "3. Search Data";
-    gotoxy(5,13); std::cout << "4. Transaction";
-    gotoxy(5,14); std::cout << "9. EXIT";
+    gotoxy(5,10); std::cout << "1. Manage Antrian";
+    gotoxy(5,11); std::cout << "2. Manage Data";
+    gotoxy(5,12); std::cout << "3. Show Data";
+    gotoxy(5,13); std::cout << "4. Search Data";
+    gotoxy(5,14); std::cout << "5. Transaction";
+    gotoxy(5,15); std::cout << "9. EXIT";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda :";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
     switch(a){
         case 1:
+            ManageAntrian();
+        case 2:
             ManageData();
             break;
-        case 2:
+        case 3:
             ShowData();
             break;
-        case 3:
+        case 4:
             SearchData();
             break;
         case 9:
@@ -56,6 +127,83 @@ void MenuAwal(){
             break;
     }
 }
+
+
+void ManageAntrian(){
+    int pilihan;
+    char value[30];
+    char kembali;
+    ManageAntrianAwal:
+    system("cls");
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MANAGE ANTRIAN";
+    gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
+    do{
+        gotoxy(5,10); std::cout << "1. Registrasi Antrian";
+        gotoxy(5,11); std::cout << "2. Panggil Antrian";
+        gotoxy(5,12); std::cout << "3. Lihat Antrian";
+        gotoxy(5,13); std::cout << "4. Hapus Antrian";
+        gotoxy(5,14); std::cout << "5. Kembali";
+        gotoxy(4,22); std::cout << "> ";std::cin >> pilihan;
+        switch (pilihan)
+        {
+        case 1: 
+            if(isFull() !=1){
+                system("cls");
+                draw();
+                Tittle();
+                gotoxy(4,6); std::cout << "Registrasi Antrian";
+                gotoxy(4,7); std::cout << "Silakan Masukkan Data";
+                gotoxy(5,10); std::cout << "Nama : "; std::cin >> value;
+                inQueue(value);
+            } else {
+                system("cls");
+                draw();
+                Tittle();
+                gotoxy(4,6); std::cout << "Registrasi Antrian";
+                gotoxy(4,7); std::cout << "Silakan Masukkan Data";
+                gotoxy(4,10); std::cout << "Data Sudah Penuh";
+                
+            }
+                gotoxy(4,19); std::cout << "Data Antrian Sudah Tersimpan";
+                gotoxy(4,20); std::cout << "Masukan b/B untuk kembali";
+                gotoxy(4,22); std::cout << "> "; std::cin >> kembali;
+                if(kembali == 'b' || 'B'){
+                    goto ManageAntrianAwal;
+                } else {
+                    MenuAwal();
+                }
+            break;
+        case 2:
+        
+        case 3: 
+            if(isEmpty() != 1){
+                system("cls");
+                draw();
+                Tittle();
+                gotoxy(4,6); "Daftar Antrian";
+                gotoxy(5,7);
+                print();
+            } else {
+                system("cls");
+            }
+            gotoxy(4,20); std::cout << "Masukan b/B untuk Kembali";
+            gotoxy(4,22); std::cout << "> "; std::cin >> kembali;
+            if(kembali == 'b' || 'B'){
+                goto ManageAntrianAwal;
+            } else {
+                MenuAwal();
+            }
+        case 5: 
+            MenuAwal();
+        default:
+            break;
+        }
+    } while(pilihan !=1);
+    getchar();
+}
+
 
 void TambahData(){
     awal:
@@ -73,7 +221,7 @@ void TambahData(){
     gotoxy(6,13); std::cout << "Harga         : "; 
     gotoxy(22,9); std::cin>>ID;
         if(ID==""){
-            gotoxy(6,10); std::coxut << "Harap Masukkan ID";
+            gotoxy(6,10); std::cout << "Harap Masukkan ID";
             goto awal;
         } 
     gotoxy(22,10); std::cin >> Nama;
@@ -144,11 +292,13 @@ void Exit(){
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
     gotoxy(4,22); std::cout << "> "; std::cin >>a;
     // if(a=='y'||a=='Y'){
-    //     break;   
+    //     goto keluar
     // }
     if(a=='t'||a=='T'){
         MenuAwal();
     }
+
+    // keluar:
 }
 
 void ManageData(){
@@ -277,4 +427,5 @@ void draw(){
 
     // //
     // gotoxy()
+    
 }
