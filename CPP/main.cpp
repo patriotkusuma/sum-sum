@@ -6,6 +6,8 @@
 #include <Windows.h>
 #include <cstdlib>
 #include <vector>
+#include <algorithm>
+#define SIZE 500
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
@@ -26,6 +28,9 @@ struct data{
     double Harga;
 };
 
+data Mobil[SIZE];
+std::vector<data> datas;
+
 // typedef struct DetailTransaction{
 //     data item;
 //     double qty;
@@ -45,15 +50,21 @@ void ShowData(); //belum selesai
 void SearchData();
 void TambahData();
 void ManageAntrian();
+void DrawForSort();
+// bool CompareInterval(Interval i1, Interval2);
+void SortingData();
+bool acompare(data lhs, data rhs){
+    return lhs.Nama < rhs.Nama;
+}
 
-std::vector<data> datas;
 
 void init(){
     antrian.head = antrian.tail = -1;
 }
 
 void LoadData(){
-    std::ifstream is("items.csv");
+    std::fstream is("items.txt");
+
     std::string item;
     while(std::getline(is, item)){
         int begin = 0;
@@ -61,21 +72,21 @@ void LoadData(){
         std::string id = item.substr(begin, pos);
         
         begin = pos + 1;
-        begin = item.find(",", begin);
-        std::string name = item.substr(begin, pos - begin);
+        pos = item.find(",",begin);
+        std::string barang = item.substr(begin, pos - begin);
 
         begin = pos + 1;
-        begin = item.find(",", begin);
-        std::string brand = item.substr(begin, pos - begin);
-
+        pos = item.find(",", begin);        
+        std::string merek = item.substr(begin, pos - begin);
+        
         begin = pos + 1;
-        begin = item.find(",", begin);
-        std::string tahun = item.substr(begin, pos-begin);
+        pos = item.find(",", begin);        
+        std::string year = item.substr(begin, pos - begin);
         
         begin = pos + 1;
         std::string price = item.substr(begin);
 
-        datas.push_back({id, name, brand});
+        datas.push_back({id,barang,merek,stoi(year),stod(price)});
     }
 
     is.close();
@@ -161,9 +172,6 @@ int main() {
     MenuAwal();
     return 0;
 }
-
-
-
 
 
 void MenuAwal(){
@@ -328,42 +336,195 @@ void Tittle(){
 }
 
 void SearchData(){
-    while(1){
-        system("cls");
-        std::string ID;
-        draw();
-        Tittle();
-        gotoxy(4,6); std::cout << "MENU SEARCH DATA";
-        gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
-        gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
-        gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
-        gotoxy(4,22); std::cin >> ID;
-        gotoxy(4,8); std::cout << ID.length();
-        if(ID.length()>5){
-            gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
-        } 
-        // else if (ID.length()<5){
-        //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
-        // }
-         else if (ID == "B" || ID == "b"){
-            MenuAwal();
-        }
-        gotoxy(4,22); system("pause");
+    std::ifstream is("items.txt");
+    std::string item;
+    int i=0;
+    int temp;
+    temp = 0;
+    while(std::getline(is, item)){
+        temp;
+        int begin = 0;
+        int pos = item.find(",");
+        std::string id = item.substr(begin, pos);
+        Mobil[i].ID = id;
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string barang = item.substr(begin, pos - begin);
+        Mobil[i].Nama = barang; 
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string merek = item.substr(begin, pos - begin);
+        Mobil[i].Brand = merek;
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string year = item.substr(begin, pos - begin);
+        Mobil[i].Tahun = stoi(year);
+
+        begin = pos + 1;
+        std::string price = item.substr(begin);
+        Mobil[i].Harga = stod(price);   
+        temp++;
+        i++;
     }
+    is.close();
+
+    int x, k,  m, n;
+    data swap;
+    for(n = 0; n<temp-1 ;n++ ){
+        for(m=0; m<temp -1; m++){
+            if(Mobil[m].ID > Mobil[m+1].ID){
+                swap = Mobil[m];
+                Mobil[m]=Mobil[m+1];
+                Mobil[m+1] = swap;
+            }
+        }
+    }
+
+    system("cls");
+    std::string id;
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU SEARCH DATA";
+    gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
+    gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+    gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+    gotoxy(4,22); std::cin >> id;
+    
+    if(id.length()>5){
+        gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+    } 
+    // else if (ID.length()<5){
+    //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
+    // }
+        else if (ID == "B" || ID == "b"){
+        MenuAwal();
+    }
+    gotoxy(4,22); system("pause");
+
+}
+
+void SortingData(){
+    
+    std::ifstream is("items.txt");
+    std::string item;
+    int i=0;
+    int temp;
+    temp = 0;
+    while(std::getline(is, item)){
+        temp;
+        int begin = 0;
+        int pos = item.find(",");
+        std::string id = item.substr(begin, pos);
+        Mobil[i].ID = id;
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string barang = item.substr(begin, pos - begin);
+        Mobil[i].Nama = barang; 
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string merek = item.substr(begin, pos - begin);
+        Mobil[i].Brand = merek;
+
+        begin = pos + 1;
+        pos = item.find(",", begin);
+        std::string year = item.substr(begin, pos - begin);
+        Mobil[i].Tahun = stoi(year);
+
+        begin = pos + 1;
+        std::string price = item.substr(begin);
+        Mobil[i].Harga = stod(price);   
+        temp++;
+        i++;
+    }
+    is.close();
+    
+    system("cls");
+    char cl,cr,hor; //border
+    hor = '\xCD' ; //horizontal-line
+    cl  = '\xCC' ; //connector-left
+    cr  = '\xB9' ; //connector-right
+    
+    std::string line(74, hor);
+    // int j, k, temp;
+    datas.clear();
+    
+    DrawForSort();
+    gotoxy(31,3); std::cout << "Daftar Harga";
+    gotoxy(4,6); std::cout << "NO";
+    gotoxy(10,6); std::cout << "ID";
+    gotoxy(19,6); std::cout << "NAMA";
+    gotoxy(40,6); std::cout << "MEREK";
+    gotoxy(52,6); std::cout << "TAHUN";
+    gotoxy(64,6); std::cout << "HARGA";
+    
+    // std::sort(Mobil, Mobil + SIZE, acompare);
+    int x, k,  m, n;
+    data swap;
+    for(n = 0; n<temp-1 ;n++ ){
+        for(m=0; m<temp -1; m++){
+            if(Mobil[m].Brand > Mobil[m+1].Brand){
+                swap = Mobil[m];
+                Mobil[m]=Mobil[m+1];
+                Mobil[m+1] = swap;
+            }
+        }
+    }
+
+    for(int i = 0; i <= temp; i++){
+        gotoxy(4,8 + i);std::cout<< i+1 ;
+        gotoxy(10,8 + i); std::cout <<Mobil[i].ID;
+        gotoxy(19,8 + i); std::cout << Mobil[i].Nama;
+        gotoxy(40,8 + i); std::cout << Mobil[i].Brand;
+        gotoxy(52,8 + i); std::cout << Mobil[i].Tahun;
+        gotoxy(64,8 + i); std::cout << Mobil[i].Harga << "000";
+    }
+    getchar();
+    gotoxy(4,49); std::cout << "> "; getchar();
+    ManageData();
+    // std::string id = item.substr
+    
 }
 
 void ShowData(){
+    char cl,cr,hor; //border
+    hor = '\xCD' ; //horizontal-line
+    cl  = '\xCC' ; //connector-left
+    cr  = '\xB9' ; //connector-right
+    
+    std::string line(74, hor);
+    
     system("cls");
+    int j = 0;
+    datas.clear();
     LoadData();
-    draw();
-    Tittle();
-    gotoxy(4,6); std::cout << "Data Harga";
+    DrawForSort();
+    gotoxy(31,3); std::cout << "Daftar Harga";
+    gotoxy(4,6); std::cout << "NO";
+    gotoxy(10,6); std::cout << "ID";
+    gotoxy(19,6); std::cout << "NAMA";
+    gotoxy(40,6); std::cout << "MEREK";
+    gotoxy(52,6); std::cout << "TAHUN";
+    gotoxy(64,6); std::cout << "HARGA";
+    gotoxy(2,7); std::cout << cl << line << cr;
     for(auto i : datas){
-        gotoxy(4, 6); std::setw(6); std::cout <<i.ID;
-        gotoxy(11, 6); std::setw(17); std::cout << i.Nama;
-        gotoxy(28, 6); std::setw(8); std::cout << i.Brand;
+        gotoxy(4,8 + j);std::cout << j+1;
+        gotoxy(10,8 + j); std::cout <<i.ID;
+        gotoxy(19,8 + j); std::cout << i.Nama;
+        gotoxy(40,8 + j); std::cout << i.Brand;
+        gotoxy(52,8 + j); std::cout << i.Tahun;
+        gotoxy(64,8 + j); std::cout << i.Harga << "000";
+        j++;
     }
+    
+    gotoxy(4,47); std::cout << "Tekan Enter Untuk kembali";
     getchar();
+    gotoxy(4,49); std::cout << "> "; getchar();
+    MenuAwal();
 }
 
 void Exit(){
@@ -393,19 +554,24 @@ void ManageData(){
     gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
     gotoxy(5,10); std::cout << "1. Tambah Data";
     gotoxy(5,11); std::cout << "2. Lihat Data";
-    gotoxy(5,12); std::cout << "3. Update Data";
-    gotoxy(5,13); std::cout << "4. Delete Data";
-    gotoxy(5,14); std::cout << "5. Kembali";
+    gotoxy(5,12); std::cout << "3. Sorting Data";
+    gotoxy(5,13); std::cout << "4. Update Data";
+    gotoxy(5,14); std::cout << "5. Delete Data";
+    gotoxy(5,15); std::cout << "6. Kembali";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda : ";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
     switch (a)
     {
     case 1:
         TambahData();
+        break;
     case 2: 
         ShowData();
         break;
-    case 5:
+    case 3:
+        SortingData();
+        break;
+    case 6:
         MenuAwal();
         break;
     
@@ -458,6 +624,41 @@ void gotoxy(int x, int y, std::string text){
     CursorPosition.Y = y;
     SetConsoleCursorPosition(console,CursorPosition);
     std::cout << text;
+}
+
+void DrawForSort(){
+     int a;
+    char tl,tr,bl,br,ver,hor,ct,cb,cl,cr,c; //border
+    tl  = '\xC9' ; //top-left
+    tr  = '\xBB' ; //top-right
+    bl  = '\xC8' ; //bottom-left
+    br  = '\xBC' ; //bottom-right
+    ver = '\xBA' ; //vertical-line
+    hor = '\xCD' ; //horizontal-line
+    ct  = '\xCB' ; //connector-top
+    cb  = '\xCA' ; //connector-bottom
+    cl  = '\xCC' ; //connector-left
+    cr  = '\xB9' ; //connector-right
+    c   = '\xCE' ; //cross
+
+    std::string line(74, hor);
+
+    gotoxy(2,1);
+    std::cout << tl << line << tr; //for the top line
+    //vertical-line in the left and right of the box
+    for(a=1; a<50; a++){
+        gotoxy(2,a+1);
+        std::cout << ver;
+        gotoxy(77, a+1);
+        std::cout << ver;
+    }
+    gotoxy(2,7); std::cout << cl << line << cr;
+    gotoxy(2,50);
+    std::cout << bl << line << br; //for the bottom line
+    gotoxy(2,5);
+    std::cout << cl << line << cr;
+    gotoxy(2,48);
+    std::cout << cl << line << cr;
 }
 
 void draw(){
