@@ -1,9 +1,11 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <fstream>
 #include <conio.h>
 #include <Windows.h>
 #include <cstdlib>
+#include <vector>
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
@@ -16,17 +18,24 @@ typedef struct{
 queue antrian;
 queue nama_pengantri;
 
-// typedef struct data{
-//     int ID;
-//     std::string Nama;
-//     std::string Brand;
-//     int Tahun;
-//     double Harga;
+struct data{
+    std::string ID;
+    std::string Nama;
+    std::string Brand;
+    int Tahun;
+    double Harga;
+};
+
+// typedef struct DetailTransaction{
+//     data item;
+//     double qty;
+//     double pay;
 // };
 
 void login();
 void Tittle();
 void draw();
+void LoadData();
 void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
 void ManageData();
@@ -37,8 +46,39 @@ void SearchData();
 void TambahData();
 void ManageAntrian();
 
+std::vector<data> datas;
+
 void init(){
     antrian.head = antrian.tail = -1;
+}
+
+void LoadData(){
+    std::ifstream is("items.csv");
+    std::string item;
+    while(std::getline(is, item)){
+        int begin = 0;
+        int pos = item.find(",");
+        std::string id = item.substr(begin, pos);
+        
+        begin = pos + 1;
+        begin = item.find(",", begin);
+        std::string name = item.substr(begin, pos - begin);
+
+        begin = pos + 1;
+        begin = item.find(",", begin);
+        std::string brand = item.substr(begin, pos - begin);
+
+        begin = pos + 1;
+        begin = item.find(",", begin);
+        std::string tahun = item.substr(begin, pos-begin);
+        
+        begin = pos + 1;
+        std::string price = item.substr(begin);
+
+        datas.push_back({id, name, brand});
+    }
+
+    is.close();
 }
 
 int isFull(){
@@ -314,8 +354,16 @@ void SearchData(){
 
 void ShowData(){
     system("cls");
+    LoadData();
     draw();
-
+    Tittle();
+    gotoxy(4,6); std::cout << "Data Harga";
+    for(auto i : datas){
+        gotoxy(4, 6); std::setw(6); std::cout <<i.ID;
+        gotoxy(11, 6); std::setw(17); std::cout << i.Nama;
+        gotoxy(28, 6); std::setw(8); std::cout << i.Brand;
+    }
+    getchar();
 }
 
 void Exit(){
@@ -354,6 +402,9 @@ void ManageData(){
     {
     case 1:
         TambahData();
+    case 2: 
+        ShowData();
+        break;
     case 5:
         MenuAwal();
         break;
