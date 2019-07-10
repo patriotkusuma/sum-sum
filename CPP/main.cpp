@@ -227,11 +227,9 @@ void MenuAwal(){
 bool repeat= true;
 
 void doTransaction(){
+    while(repeat)
+        InputForm();
     system("cls");
-    DrawForm();
-    getchar();
-    getchar();
-
 }
 
 void ManageAntrian(){
@@ -330,7 +328,7 @@ void TambahData(){
     gotoxy(6,11); std::cout << "Brand         : "; 
     gotoxy(6,12); std::cout << "Tahun Terbit  : "; 
     gotoxy(6,13); std::cout << "Harga         : "; 
-    gotoxy(22,9); std::getline(std::cin,ID);
+    gotoxy(22,9); std::getline(std::cin, ID);
         if(ID==""){
             gotoxy(6,10); std::cout << "Harap Masukkan ID";
             goto awal;
@@ -767,18 +765,86 @@ void draw(){
 }
 
 void InputForm(){
+    LoadData();
     system("cls");
     DrawForm();
+    std::string nama;
+    std::string alamat;
     double sub = 0;
     double total = 0;
     std::vector<DetailTransaction> details;
-    ;
-
+    int j =0;
+    gotoxy(45, 2); std::cout << "NAMA   : ";
+    gotoxy(45, 3); std::cout << "Alamat : ";
+    std::cin.ignore();
+    gotoxy(53, 2); std::getline(std::cin, nama);
+    gotoxy(53, 3); std::getline(std::cin, alamat);
+    int i=0;
     while(true){
         for(auto d:details){
-            gotoxy(4,8);
+            gotoxy(4,8 + i); std::cout << d.item.ID;
+            gotoxy(14,8 + i); std::cout << d.item.Nama;
+            gotoxy(45, 8 + i); std::cout << d.item.Harga;
+            gotoxy(56,8 + i); std::cout << d.qty;
+            sub = d.item.Harga * d.qty;
+            gotoxy(66, 8 + i); std::cout << sub;
+            i++;
         }
+        total += sub;
+        gotoxy(56,30); std::cout << total;
+
+        form:
+        gotoxy(4,8 + j); std::string id;
+        std::getline(std::cin, id);
+        if(id == "!")
+            return;
+
+        if(id == "#"){
+            repeat = false;
+            return;
+        }
+
+        if(id == "")
+            break;
+        
+        data i = find_data(id);
+        if(id != i.ID)
+            {
+                goto form;
+            }
+
+        if(i.ID == "")
+            continue;
+
+        double qty = 1;
+        gotoxy(14, 8 +j); std::cout << i.Nama;
+        gotoxy(45, 8 + j); std::cout << i.Harga;
+        gotoxy(56, 8 + j); std::cout << qty;
+
+        std::string in_qty;
+        std::cin.ignore();
+        gotoxy(56, 8); std::getline(std::cin, in_qty);
+        if(in_qty != "")
+            qty = stod(in_qty);
+        
+        details.push_back({{i.ID, i.Nama, i.Brand, i.Tahun, i.Harga}, qty});
     }
+
+    gotoxy(56,31); std::string in_pay;
+    std::getline(std::cin, in_pay);
+
+    if(in_pay == "!")
+        return;
+    
+    DetailTransaction bayar;
+    double pay;
+    bayar.pay = stod(in_pay);
+    gotoxy(56,31); std::cout << bayar.pay;
+    gotoxy(56,31); std::cout << bayar.pay - total;
+
+    gotoxy(4,34); std::cout << "> ";
+    std::cin.get();
+    MenuAwal();
 }
 
 void DrawForm(){
@@ -796,6 +862,7 @@ void DrawForm(){
     cr  = '\xB9' ; //connector-right
     c   = '\xCE' ; //cross
 
+    gotoxy(4,2); std::cout << "SUM-SUM DEALER";
     std::string line(74, hor);
     gotoxy(2,1);
     std::cout << tl << line << tr; //for the top line
@@ -811,32 +878,14 @@ void DrawForm(){
     std::cout << bl << line << br; //for the bottom line
     gotoxy(2,5);
     std::cout << cl << line << cr;
-    gotoxy(2,30);
+    gotoxy(2,28);std::cout << cl << line << cr;
     gotoxy(2,7);std::cout << cl << line << cr;
-    gotoxy(2, 8);  std::cout << cl << line << cr;
+    gotoxy(2, 33);  std::cout << cl << line << cr;
 
-    // gotoxy(2,3);
-    // std::cout << cl << line << cr;
-    // //
-    // // gotoxy(9,3);
-    // std::cout << ct;
-    // gotoxy(9,4);
-    // std::cout << ver;
-    // gotoxy(9,5);
-    // std::cout << cb;
-    // //
-    // gotoxy(42, 3);
-    // std::cout << ct;
-    // gotoxy(42, 4);
-    // std::cout << ver;
-    // gotoxy(42, 5);
-    // std::cout << cb;
-gotoxy(4,6); std::cout << "ID";
+    gotoxy(4,6); std::cout << "ID";
     gotoxy(14,6); std::cout << "Nama";
     gotoxy(45,6);std::cout << "Price";
     gotoxy(56,6); std::cout << "QTY";
-    gotoxy(66,6); std::cout << "Sub"
-    // //
-    // gotoxy()
+    gotoxy(66,6); std::cout << "Sub";
     
 }
