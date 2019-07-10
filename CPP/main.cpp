@@ -55,6 +55,7 @@ void DrawForm();
 void InputForm();
 void UpdateData();
 void doTransaction();
+void DeleteData();
 data find_data(std::string id);
 // bool CompareInterval(Interval i1, Interval2);
 void SortingData();
@@ -239,7 +240,7 @@ void UpdateData(){
     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
     gotoxy(4,22); std::cin >> id;
-    for(int i = 0; i< temp; i++){
+    for(int i = 0; i!=temp; i++){
         if(Mobil[i].ID == id){
             gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
             gotoxy(5,9); std::cout << "Nama    : "; std::cout << Mobil[i].Nama;
@@ -248,7 +249,7 @@ void UpdateData(){
             gotoxy(5,12); std::cout << "Harga   : "; std::cout << Mobil[i].Harga;
             gotoxy(4,22);
             getchar();
-            gotoxy(5,8); std::cout << "ID      : "; std::cin >> Mobil[i].ID;
+            gotoxy(5,8); std::cout << "ID      : "; std::cin >> Mobil[i].ID; std::cin.ignore();
             gotoxy(5,9); std::cout << "Nama    : "; std::getline(std::cin,Mobil[i].Nama);
             gotoxy(5,10); std::cout << "Merek   : "; std::getline(std::cin,Mobil[i].Brand);
             gotoxy(5,11); std::cout << "Tahun   : "; std::cin >> Mobil[i].Tahun;
@@ -263,9 +264,17 @@ void UpdateData(){
     gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
     gotoxy(4,19); std::cout << "Data Sudah Tersimpan dengan Baik :";
     gotoxy(4,20); std::cout << "Tekan Enter untuk Kembali";
-    gotoxy(4,22); getchar();
+    gotoxy(4,22);
     std::cin.ignore();
-
+    std::ofstream os("temp.txt");
+    for(int i = 0; i != temp; i++){
+        os << Mobil[i].ID << "," << Mobil[i].Nama 
+        << "," << Mobil[i].Brand << "," << Mobil[i].Tahun 
+        << "," << Mobil[i].Harga << std::endl;
+    }
+    os.close();
+    remove("items.txt");
+    rename("temp.txt", "items.txt");
     MenuAwal();
     
 }
@@ -684,6 +693,17 @@ void Exit(){
     // keluar:
 }
 
+void DeleteData(){
+    system("cls");
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU DELETE DATA";
+    gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
+    
+    gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+    gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+}
+
 void ManageData(){
     system("cls");
     int a;
@@ -712,6 +732,10 @@ void ManageData(){
         break;
     case 4:
         UpdateData();
+        break;
+    case 5:
+        DeleteData();
+        break;
     case 6:
         MenuAwal();
         break;
