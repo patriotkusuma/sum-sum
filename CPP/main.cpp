@@ -31,11 +31,11 @@ struct data{
 data Mobil[SIZE];
 std::vector<data> datas;
 
-// typedef struct DetailTransaction{
-//     data item;
-//     double qty;
-//     double pay;
-// };
+struct DetailTransaction{
+    data item;
+    double qty;
+    double pay;
+};
 
 void login();
 void Tittle();
@@ -51,6 +51,11 @@ void SearchData();
 void TambahData();
 void ManageAntrian();
 void DrawForSort();
+void DrawForm();
+void InputForm();
+void UpdateData();
+void doTransaction();
+data find_data(std::string id);
 // bool CompareInterval(Interval i1, Interval2);
 void SortingData();
 bool acompare(data lhs, data rhs){
@@ -173,6 +178,17 @@ int main() {
     return 0;
 }
 
+void UpdateData(){
+    // datas.clear();
+    system("cls");
+    // LoadData();
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "Menu Update Data";
+    gotoxy(4,7); std::cout << "Masukkan PK yang ingin diubah";
+    gotoxy(4,8); std::cout << "PK :";
+    
+}
 
 void MenuAwal(){
     int a;
@@ -183,7 +199,7 @@ void MenuAwal(){
     gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
     gotoxy(5,10); std::cout << "1. Manage Antrian";
     gotoxy(5,11); std::cout << "2. Manage Data";
-    gotoxy(5,12); std::cout << "3. Show Data";
+    gotoxy(5,12); std::cout << "3. Sort Data by Name";
     gotoxy(5,13); std::cout << "4. Search Data";
     gotoxy(5,14); std::cout << "5. Transaction";
     gotoxy(5,15); std::cout << "9. EXIT";
@@ -196,17 +212,27 @@ void MenuAwal(){
             ManageData();
             break;
         case 3:
-            ShowData();
+            SortingData();
             break;
         case 4:
             SearchData();
             break;
+        case 5:
+            doTransaction();
         case 9:
             Exit();
             break;
     }
 }
+bool repeat= true;
 
+void doTransaction(){
+    system("cls");
+    DrawForm();
+    getchar();
+    getchar();
+
+}
 
 void ManageAntrian(){
     int pilihan;
@@ -290,6 +316,8 @@ void ManageAntrian(){
 
 void TambahData(){
     awal:
+    std::fstream stud;
+    stud.open("items.txt", std::ios::app);
     system("cls");
     std::string ID,Nama,Brand,TahunTerbit, Harga;
     char pilihan;
@@ -302,12 +330,12 @@ void TambahData(){
     gotoxy(6,11); std::cout << "Brand         : "; 
     gotoxy(6,12); std::cout << "Tahun Terbit  : "; 
     gotoxy(6,13); std::cout << "Harga         : "; 
-    gotoxy(22,9); std::cin>>ID;
+    gotoxy(22,9); std::getline(std::cin,ID);
         if(ID==""){
             gotoxy(6,10); std::cout << "Harap Masukkan ID";
             goto awal;
         } 
-    gotoxy(22,10); std::cin >> Nama;
+    gotoxy(22,10); std::getline(std::cin, Nama);
         if(Nama==""){
             gotoxy(6,11); std::cout << "Harap Masukkan Nama";
             goto awal;
@@ -326,6 +354,11 @@ void TambahData(){
         }
     gotoxy(4,20); std::cout << "Apakah anda yakin ingin menyimpan?(Y/T)";
     gotoxy(4,22);std::cin >> pilihan;
+    if(pilihan=='y'||'Y'){
+        stud<<ID<<","<<Nama<<","<<Brand<<","<<TahunTerbit<<","<<Harga<<'\n';
+        stud.close();
+        ManageData();
+    }
     if(pilihan=='t'||'T'){
         ManageData();
     }
@@ -333,6 +366,14 @@ void TambahData(){
 
 void Tittle(){
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
+}
+
+data find_data(std::string id){
+    for(auto i : datas)
+        if(i.ID == id)
+            return i;
+
+    return data{"", "", "", 0, 0};
 }
 
 void SearchData(){
@@ -370,7 +411,6 @@ void SearchData(){
         i++;
     }
     is.close();
-
     int x, k,  m, n;
     data swap;
     for(n = 0; n<temp-1 ;n++ ){
@@ -382,8 +422,8 @@ void SearchData(){
             }
         }
     }
-
     system("cls");
+
     std::string id;
     draw();
     Tittle();
@@ -399,9 +439,19 @@ void SearchData(){
     // else if (ID.length()<5){
     //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
     // }
-        else if (ID == "B" || ID == "b"){
+    else if (id == "B" || id == "b"){
         MenuAwal();
-    }
+    } 
+    // else if(std::binary_search(Mobil,Mobil+temp,id)){
+    //     gotoxy(4,10); std::cout << "ID ditemukan";
+    // }
+    // else {
+    //     // while(true){
+    //     //     data i = find_data(id);
+    //     //     for(auto)
+    //     // }
+        
+    // }
     gotoxy(4,22); system("pause");
 
 }
@@ -554,7 +604,7 @@ void ManageData(){
     gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
     gotoxy(5,10); std::cout << "1. Tambah Data";
     gotoxy(5,11); std::cout << "2. Lihat Data";
-    gotoxy(5,12); std::cout << "3. Sorting Data";
+    gotoxy(5,12); std::cout << "3. Sorting Data by Name";
     gotoxy(5,13); std::cout << "4. Update Data";
     gotoxy(5,14); std::cout << "5. Delete Data";
     gotoxy(5,15); std::cout << "6. Kembali";
@@ -677,7 +727,6 @@ void draw(){
     c   = '\xCE' ; //cross
 
     std::string line(74, hor);
-
     gotoxy(2,1);
     std::cout << tl << line << tr; //for the top line
     //vertical-line in the left and right of the box
@@ -712,6 +761,81 @@ void draw(){
     // gotoxy(42, 5);
     // std::cout << cb;
 
+    // //
+    // gotoxy()
+    
+}
+
+void InputForm(){
+    system("cls");
+    DrawForm();
+    double sub = 0;
+    double total = 0;
+    std::vector<DetailTransaction> details;
+    ;
+
+    while(true){
+        for(auto d:details){
+            gotoxy(4,8);
+        }
+    }
+}
+
+void DrawForm(){
+    int a;
+    char tl,tr,bl,br,ver,hor,ct,cb,cl,cr,c; //border
+    tl  = '\xC9' ; //top-left
+    tr  = '\xBB' ; //top-right
+    bl  = '\xC8' ; //bottom-left
+    br  = '\xBC' ; //bottom-right
+    ver = '\xBA' ; //vertical-line
+    hor = '\xCD' ; //horizontal-line
+    ct  = '\xCB' ; //connector-top
+    cb  = '\xCA' ; //connector-bottom
+    cl  = '\xCC' ; //connector-left
+    cr  = '\xB9' ; //connector-right
+    c   = '\xCE' ; //cross
+
+    std::string line(74, hor);
+    gotoxy(2,1);
+    std::cout << tl << line << tr; //for the top line
+    //vertical-line in the left and right of the box
+    for(a=1; a<35; a++){
+        gotoxy(2,a+1);
+        std::cout << ver;
+        gotoxy(77, a+1);
+        std::cout << ver;
+    }
+
+    gotoxy(2,35);
+    std::cout << bl << line << br; //for the bottom line
+    gotoxy(2,5);
+    std::cout << cl << line << cr;
+    gotoxy(2,30);
+    gotoxy(2,7);std::cout << cl << line << cr;
+    gotoxy(2, 8);  std::cout << cl << line << cr;
+
+    // gotoxy(2,3);
+    // std::cout << cl << line << cr;
+    // //
+    // // gotoxy(9,3);
+    // std::cout << ct;
+    // gotoxy(9,4);
+    // std::cout << ver;
+    // gotoxy(9,5);
+    // std::cout << cb;
+    // //
+    // gotoxy(42, 3);
+    // std::cout << ct;
+    // gotoxy(42, 4);
+    // std::cout << ver;
+    // gotoxy(42, 5);
+    // std::cout << cb;
+gotoxy(4,6); std::cout << "ID";
+    gotoxy(14,6); std::cout << "Nama";
+    gotoxy(45,6);std::cout << "Price";
+    gotoxy(56,6); std::cout << "QTY";
+    gotoxy(66,6); std::cout << "Sub"
     // //
     // gotoxy()
     
