@@ -8,17 +8,17 @@
 #include <vector>
 #include <algorithm>
 #define SIZE 500
+#define MAX 50
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
-typedef struct{
-    int base[100];
-    char base1[100][30];
-    int head, tail;
-}queue;
-queue antrian;
-queue nama_pengantri;
+
+
+struct queue{
+    int kode[MAX], head, tail;
+    std::string nama[MAX], alamat[MAX];
+}antrian;
 
 struct data{
     std::string ID;
@@ -64,11 +64,130 @@ bool acompare(data lhs, data rhs){
 }
 
 //queue
+void init();
+bool isFull();
+bool isEmpty();
+void inQueue();
+void deQueue();
+void print();
+void clear();
 
-void init(){
-    antrian.head = antrian.tail = -1;
+
+int main() {
+    system("cls");
+    login();
+    MenuAwal();
+    return 0;
 }
 
+
+//queue
+void inQueue(){
+    system("cls");
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU REGISTRASI ANTRIAN";
+    std::string nama;
+    std::string alamat;
+    if(!isFull()){
+            std::cin.ignore();
+            gotoxy(4,7); std::cout << "Masukan Data di bawah ini:";
+            gotoxy(5,8); std::cout << "Nama      :"; std::getline(std::cin, nama);
+            antrian.nama[antrian.tail] = nama;
+            gotoxy(5,9); std::cout << "Alamat    :"; std::getline(std::cin, alamat);
+            antrian.alamat[antrian.tail] = alamat;
+            gotoxy(4,19); std::cout << "Data berhasil ditambahkan ke dalam antrian ^_^";
+            antrian.tail++;
+    
+    }else{
+        gotoxy(5,10); std::cout << "Data sudah penuh";
+    }
+    gotoxy(4,22);
+    getch();
+    ManageAntrian();
+
+}
+void clear(){
+    antrian.head=-1;
+    antrian.tail=-1;
+    ManageAntrian();
+}
+void deQueue(){
+    system("cls");
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU PANGGIL ANTRIAN";
+    std::string nama;
+    std::string alamat;
+    gotoxy(4,7); std::cout << "ANTRIAN NO : ";
+    gotoxy(5,8); std::cout << "Nama       : ";
+    gotoxy(5,9); std::cout << "Alamat     : ";
+    if(!isEmpty()){
+            gotoxy(19,7); std::cout << antrian.head + 1;
+            gotoxy(19,8); std::cout << antrian.nama[antrian.head];
+            gotoxy(19,9); std::cout << antrian.alamat[antrian.head];
+            gotoxy(4,22);
+            getchar(); 
+        for(int i=antrian.head;i<antrian.tail;i++){
+            antrian.nama[i]=antrian.nama[i+1];
+            antrian.alamat[i]=antrian.alamat[i+1];
+
+        }
+        antrian.tail--;
+    }else{
+        gotoxy(5,10); std::cout << "Data sudah penuh";
+    }
+    gotoxy(4,22);
+    getch();
+    ManageAntrian();
+}
+bool isFull(){
+    if(antrian.tail==MAX)
+        return true;
+    else return false;
+}
+
+bool isEmpty(){
+    if(antrian.tail==0)
+        return true;
+    else return false;
+}
+
+void init(){
+    antrian.head=0;
+    antrian.tail=0;
+}
+void print(){
+    char hor,cl,cr;//border
+    cl  = '\xCC' ; //connector-left
+    cr  = '\xB9' ; //connector-right
+
+    std::string line(74, hor);
+    system("cls");
+    draw();
+    gotoxy(2,8); std::cout << cl << line << cr;
+    Tittle();
+    gotoxy(4,6);std::cout << "DAFTAR ANTRIAN";
+    int j=0;
+    if(!isEmpty()){
+        gotoxy(5,7); std::cout << "NO";
+        gotoxy(12,7);std::cout << "Nama";
+        gotoxy(42,7); std::cout << "Alamat";
+        for(int i=antrian.head; i<=antrian.tail-1;i++){
+            gotoxy(5,9+j); std::cout << i + 1;
+            gotoxy(12,9+j); std::cout <<antrian.nama[i];
+            gotoxy(42,9+j); std::cout << antrian.alamat[i];
+            j++;
+        }
+    }
+    getchar();
+    gotoxy(4,22); std::cout << ">"; getchar();
+    ManageAntrian();
+}
+
+
+
+//Manage Data
 void LoadData(){
     std::fstream is("items.txt");
 
@@ -97,86 +216,6 @@ void LoadData(){
     }
 
     is.close();
-}
-
-int isFull(){
-    if(antrian.tail == 100){
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int isEmpty(){
-    if(antrian.tail == -1){
-        antrian.head = -1;
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-char base1[30];
-int base;
-void inQueue(int base, char base1[30]){
-    if(isEmpty() == 1){
-        antrian.head = antrian.tail = 0;
-        nama_pengantri.head = nama_pengantri.tail = 0;
-        antrian.base[antrian.tail] = base;
-        for(int i = 0; i<30; i++){
-            nama_pengantri.base1[nama_pengantri.tail][i] = base1[i];
-        }
-        gotoxy(4,18); std::cout << "Silakan Menunggu Panggilan";
-    } else if(isFull() == 0){
-        antrian.tail++; 
-        nama_pengantri.tail++;
-        antrian.base[antrian.tail] = base;
-        for(int i = 0; i < 30; i++){
-            nama_pengantri.base1[nama_pengantri.tail][i]= base1[i];
-        }
-        gotoxy(4,18); std::cout << "Silakan Menunggu Panggilan";
-    }
-}
-
-
-int deQueue(){
-    if(isEmpty() == 0){
-        int i, e;
-        char a[30];
-        e = antrian.base[antrian.head];
-        for(i=0; i< 30; i++){
-            a[i]=nama_pengantri.base1[nama_pengantri.head][i];
-        }
-
-        for(i=antrian.head; i<antrian.tail;i++){
-            antrian.base[i] = antrian.base[i+1];
-            for( int j=0; j<30; j++){
-                nama_pengantri.base1[i][j]=nama_pengantri.base1[i][j];
-            }
-        }
-
-        antrian.tail--;
-        nama_pengantri.tail--;
-        printf("Antrian dengan No %i dengan nama %s Silakan Masuk", e,a);
-        std::cout << e;
-        std::cout << a;
-        return e;
-        return a[30];
-    } else {
-        gotoxy(5,8); std::cout << "Antrian Kosong";
-    }
-}
-
-void buat(){
-    antrian.head=antrian.tail=-1;
-    nama_pengantri.head=nama_pengantri.tail=-1;
-}
-
-int main() {
-    system("cls");
-    login();
-    MenuAwal();
-    return 0;
 }
 
 
@@ -321,6 +360,7 @@ void doTransaction(){
 
 void ManageAntrian(){
     int pilihan;
+    int penuh, kosong;
     char value[30];
     char kembali;
     int n;
@@ -341,54 +381,18 @@ void ManageAntrian(){
         switch (pilihan)
         {
         case 1: 
-            if(isFull() !=1){
-                system("cls");
-                draw();
-                Tittle();
-                gotoxy(4,6); std::cout << "Registrasi Antrian";
-                gotoxy(4,7); std::cout << "Silakan Masukkan Data";
-                gotoxy(5,10); std::cout << "Nomor Registrasi Anda adalah :" << n;
-                base = n;
-                gotoxy(5,11); std::cout << "Nama : ";std::cin >>base1;
-                n++;
-                getchar();
-                gotoxy(4,19); std::cout <<"Data Antrian Sudah Tersimpan";
-                gotoxy(4,20); std::cout << "Tekan Enter Untuk Kembali";
-                gotoxy(4,22); std::cout << "> "; getchar();
-                inQueue(base, base1);
-                goto ManageAntrianAwal;
-            } 
+            inQueue();
             break;
-        case 2: //Panggil Antrian
-            system("cls");
-            draw();
-            Tittle;
-            gotoxy(4,6); std::cout << "Panggil Antrian";
+        case 2: //Panggil Antrian 
             deQueue();
-            getchar();
-            gotoxy(4,20); std::cout << "Tekan Enter Untuk Kembali";
-            gotoxy(4,22); std::cout << "> "; getchar();
-            goto ManageAntrianAwal;
             break;
-
         case 3: //Daftar Antrian
-            if(isEmpty() != 1){
-                system("cls");
-                draw();
-                Tittle();
-                gotoxy(4,6); std::cout<< "Daftar Antrian";
-                gotoxy(5,7);
-                // print();
-            } else {
-                system("cls");
-            }
-            gotoxy(4,20); std::cout << "Masukan b/B untuk Kembali";
-            gotoxy(4,22); std::cout << "> "; std::cin >> kembali;
-            if(kembali == 'b' || 'B'){
-                goto ManageAntrianAwal;
-            } else {
-                MenuAwal();
-            }
+            print();
+            break;
+        case 4:
+            clear();
+            
+            break;
         case 5: 
             MenuAwal();
         default:
@@ -956,6 +960,13 @@ void InputForm(){
     gotoxy(56,31); std::cout << bayar.pay - total;
 
     gotoxy(4,34); std::cout << "> ";
+
+    // std::fstream trs;
+    // trs.open("transaksi.txt", std::ios::app);
+    // for(auto i : details){
+    //     trs <<"," << i.pay << "," << i.qty <<std::endl;
+    // }
+    // trs.close();
     std::cin.get();
     MenuAwal();
 }
