@@ -63,6 +63,7 @@ bool acompare(data lhs, data rhs){
     return lhs.Nama < rhs.Nama;
 }
 
+//queue
 
 void init(){
     antrian.head = antrian.tail = -1;
@@ -137,6 +138,7 @@ void inQueue(int base, char base1[30]){
     }
 }
 
+
 int deQueue(){
     if(isEmpty() == 0){
         int i, e;
@@ -170,14 +172,13 @@ void buat(){
     nama_pengantri.head=nama_pengantri.tail=-1;
 }
 
-
-
 int main() {
     system("cls");
     login();
     MenuAwal();
     return 0;
 }
+
 
 void UpdateData(){
     // datas.clear();
@@ -219,24 +220,13 @@ void UpdateData(){
         i++;
     }
     is.close();
-    int x, k,  m, n;
-    data swap;
-    for(n = 0; n<temp-1 ;n++ ){
-        for(m=0; m<temp -1; m++){
-            if(Mobil[m].ID > Mobil[m+1].ID){
-                swap = Mobil[m];
-                Mobil[m]=Mobil[m+1];
-                Mobil[m+1] = swap;
-            }
-        }
-    }
     std::string id,kode, barang, merek;
     int tahun;
     double harga;
     draw();
     Tittle();
     gotoxy(4,6); std::cout << "MENU UPDATE DATA";
-    gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
+    gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin diubah";
     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
     gotoxy(4,22); std::cin >> id;
@@ -247,14 +237,21 @@ void UpdateData(){
             gotoxy(5,10); std::cout << "Merek   : "; std::cout << Mobil[i].Brand;
             gotoxy(5,11); std::cout << "Tahun   : "; std::cout << Mobil[i].Tahun;
             gotoxy(5,12); std::cout << "Harga   : "; std::cout << Mobil[i].Harga;
-            gotoxy(4,22);
             getchar();
+            gotoxy(4,22);
+            system("pause");
+            system("cls");
+            draw();
+            Tittle();
+            gotoxy(4,6); std::cout << "MENU UPDATE DATA";
+            gotoxy(4,7); std::cout << "Harap Masukkan data dibawah ini : "; 
             gotoxy(5,8); std::cout << "ID      : "; std::cin >> Mobil[i].ID; std::cin.ignore();
             gotoxy(5,9); std::cout << "Nama    : "; std::getline(std::cin,Mobil[i].Nama);
             gotoxy(5,10); std::cout << "Merek   : "; std::getline(std::cin,Mobil[i].Brand);
             gotoxy(5,11); std::cout << "Tahun   : "; std::cin >> Mobil[i].Tahun;
             gotoxy(5,12); std::cout << "Harga   : "; std::cin >> Mobil[i].Harga;
         }
+
     }
     getchar();
     system("cls");
@@ -275,7 +272,7 @@ void UpdateData(){
     os.close();
     remove("items.txt");
     rename("temp.txt", "items.txt");
-    MenuAwal();
+    ManageData();
     
 }
 
@@ -499,17 +496,6 @@ void SearchData(){
         i++;
     }
     is.close();
-    int x, k,  m, n;
-    data swap;
-    for(n = 0; n<temp-1 ;n++ ){
-        for(m=0; m<temp -1; m++){
-            if(Mobil[m].ID > Mobil[m+1].ID){
-                swap = Mobil[m];
-                Mobil[m]=Mobil[m+1];
-                Mobil[m+1] = swap;
-            }
-        }
-    }
     system("cls");
 
     std::string id;
@@ -528,31 +514,13 @@ void SearchData(){
             gotoxy(5,11); std::cout << "Tahun   : "; std::cout << Mobil[i].Tahun;
             gotoxy(5,12); std::cout << "Harga   : "; std::cout << Mobil[i].Harga;
 
+        } else if(Mobil[i].ID != id){
+            gotoxy(5,10); std::cout << "Maaf data dengan ID" << id << "tidak ditemukan";
         }
     }
     gotoxy(4,22); system("pause");
     MenuAwal();
-    // if(id.length()>5){
-    //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
-    // } 
-    // else if (ID.length()<5){
-    //     gotoxy(4,8); std::cout << "Harap memasukkan 5 karakter";
-    // }
-    // else if (id == "B" || id == "b"){
-    //     MenuAwal();
-    // } 
-    // else if(std::binary_search(Mobil,Mobil+temp,id)){
-    //     gotoxy(4,10); std::cout << "ID ditemukan";
-    // }
-    // else {
-    //     // while(true){
-    //     //     data i = find_data(id);
-    //     //     for(auto)
-    //     // }
-        
-    // }
-
-}
+   }
 
 void SortingData(){
     
@@ -672,7 +640,7 @@ void ShowData(){
     gotoxy(4,47); std::cout << "Tekan Enter Untuk kembali";
     getchar();
     gotoxy(4,49); std::cout << "> "; getchar();
-    MenuAwal();
+    ManageData();
 }
 
 void Exit(){
@@ -694,14 +662,41 @@ void Exit(){
 }
 
 void DeleteData(){
+    datas.clear();
     system("cls");
+    LoadData();
     draw();
     Tittle();
     gotoxy(4,6); std::cout << "MENU DELETE DATA";
-    gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
-    
-    gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+    gotoxy(4,7); std::cout << "Data keberapa yang akan dihapus";
+    gotoxy(4,19); std::cout << "Masukkan pada kolom di bawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+    
+    std::vector<std::string> records;
+    std::string line;
+    std::ifstream records_input("items.txt");
+    while(std::getline(records_input,line)){
+        records.push_back(line);
+    }
+    records_input.close();
+
+    size_t recno = records.size();
+    size_t recno1;
+    int re;
+    recno = re - 1;
+    gotoxy(4,22); std::cin>>recno1;
+    recno1--;
+    records.erase(records.begin() + recno1);
+    recno = records.size();
+    
+    std::ofstream os("temp.txt");
+    for(size_t i = 0; i != recno; i++){
+        os << records[i] << std:: endl;
+    }
+    os.close();
+    remove("items.txt");
+    rename("temp.txt", "items.txt");
+    ManageData();
 }
 
 void ManageData(){
