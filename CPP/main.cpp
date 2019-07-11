@@ -3,7 +3,6 @@
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
-
 struct data{
     std::string ID;
     std::string Nama;
@@ -37,6 +36,7 @@ void ManageAntrian();
 void DrawForSort();
 void DrawForm();
 void InputForm();
+void TransactionFromQueue();
 void UpdateData();
 void doTransaction();
 void DeleteData();
@@ -112,10 +112,10 @@ void deQueue(){
             gotoxy(19,9); std::cout << antrian.alamat[antrian.head];
             gotoxy(4,22);
             getchar(); 
+
         for(int i=antrian.head;i<antrian.tail;i++){
             antrian.nama[i]=antrian.nama[i+1];
             antrian.alamat[i]=antrian.alamat[i+1];
-
         }
         antrian.tail--;
     }else{
@@ -169,8 +169,6 @@ void print(){
     ManageAntrian();
 }
 
-
-
 //Manage Data
 void LoadData(){
     std::fstream is("items.txt");
@@ -201,7 +199,6 @@ void LoadData(){
 
     is.close();
 }
-
 
 void UpdateData(){
     // datas.clear();
@@ -593,7 +590,6 @@ void SortingData(){
     // std::string id = item.substr
     
 }
-
 void ShowData(){
     char cl,cr,hor; //border
     hor = '\xCD' ; //horizontal-line
@@ -637,16 +633,33 @@ void Exit(){
     char a;
     Tittle();
     gotoxy(4,6); std::cout << "GOOD BYE";
+    gotoxy(5,8); std::cout << "Aplikasi ini dibuat oleh : ";
+    gotoxy(5,10); std::cout << "[1] Patriot Kusuma Sejati";
+    gotoxy(62,10); std::cout << "[18.11.1819]";
+    gotoxy(5,11); std::cout << "[2] Vito Nur Ariyanto";
+    gotoxy(62,11); std::cout << "[18.11.1830]";
+    gotoxy(5,12); std::cout << "[3] Anselmus Rusdiatmaja";
+    gotoxy(62,12); std::cout << "[18.11.1856]";
+    gotoxy(5,13); std::cout << "[4] Sidiq Agung Maridia";
+    gotoxy(62,13); std::cout << "[18.11.1871]";
+    gotoxy(5,14); std::cout << "[5] Yesica Jacinda Asmara Devi";
+    gotoxy(62,14); std::cout << "[18.11.1853]";
+    gotoxy(5,15); std::cout << "[6] Marsha Recha Hapsari";
+    gotoxy(62,15); std::cout << "[18.11.1814]";
+    gotoxy(5,16); std::cout << "[7] Sumiyati";
+    gotoxy(62,16); std::cout << "[18.11.1810]";
+
+
+
+
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
     gotoxy(4,22); std::cout << "> "; std::cin >>a;
-    // if(a=='y'||a=='Y'){
-    //     goto keluar
-    // }
+    if(a=='y'||a=='Y'){
+        system("cls");
+    }
     if(a=='t'||a=='T'){
         MenuAwal();
     }
-
-    // keluar:
 }
 
 void DeleteData(){
@@ -767,6 +780,97 @@ void gotoxy(int x, int y){
     SetConsoleCursorPosition(console,CursorPosition);
 }
 
+void TransactionFromQueue(){
+    LoadData();
+    system("cls");
+    DrawForm();
+    std::string nama;
+    std::string alamat;
+    double sub = 0;
+    double total = 0;
+    std::vector<DetailTransaction> details;
+    int j =0;
+    gotoxy(45, 2); std::cout << "NAMA   : ";
+    gotoxy(45, 3); std::cout << "Alamat : ";
+    std::cin.ignore();
+    gotoxy(53, 2); std::getline(std::cin, nama);
+    gotoxy(53, 3); std::getline(std::cin, alamat);
+    int i=0;
+    while(true){
+        for(auto d:details){
+            gotoxy(4,8 + i); std::cout << d.item.ID;
+            gotoxy(14,8 + i); std::cout << d.item.Nama;
+            gotoxy(45, 8 + i); std::cout << d.item.Harga;
+            gotoxy(56,8 + i); std::cout << d.qty;
+            sub = d.item.Harga * d.qty;
+            gotoxy(66, 8 + i); std::cout << sub;
+            i++;
+        }
+        total += sub;
+        gotoxy(56,30); std::cout << total;
+
+        form:
+        gotoxy(4,8 + j); std::string id;
+        std::getline(std::cin, id);
+        if(id == "!")
+            return;
+
+        if(id == "#"){
+            repeat = false;
+            return;
+        }
+
+        if(id == "")
+            break;
+        
+        data i = find_data(id);
+        if(id != i.ID)
+            {
+                goto form;
+            }
+
+        if(i.ID == "")
+            continue;
+
+        double qty = 1;
+        gotoxy(14, 8 +j); std::cout << i.Nama;
+        gotoxy(45, 8 + j); std::cout << i.Harga;
+        gotoxy(56, 8 + j); std::cout << qty;
+
+        std::string in_qty;
+        std::cin.ignore();
+        gotoxy(56, 8); std::getline(std::cin, in_qty);
+        if(in_qty != "")
+            qty = stod(in_qty);
+        
+        details.push_back({{i.ID, i.Nama, i.Brand, i.Tahun, i.Harga}, qty});
+        j++;
+    }
+
+    gotoxy(56,29); std::string in_pay;
+    std::getline(std::cin, in_pay);
+
+    if(in_pay == "!")
+        return;
+    
+    DetailTransaction bayar;
+    double pay;
+    bayar.pay = stod(in_pay);
+    gotoxy(56,31); std::cout << bayar.pay;
+    gotoxy(56,31); std::cout << bayar.pay - total;
+
+    gotoxy(4,34); std::cout << "> ";
+
+    // std::fstream trs;
+    // trs.open("transaksi.txt", std::ios::app);
+    // for(auto i : details){
+    //     trs <<"," << i.pay << "," << i.qty <<std::endl;
+    // }
+    // trs.close();
+    std::cin.get();
+    MenuAwal();
+}
+
 void gotoxy(int x, int y, std::string text){
     CursorPosition.X = x;
     CursorPosition.Y = y;
@@ -775,7 +879,7 @@ void gotoxy(int x, int y, std::string text){
 }
 
 void DrawForSort(){
-     int a;
+    int a;
     char tl,tr,bl,br,ver,hor,ct,cb,cl,cr,c; //border
     tl  = '\xC9' ; //top-left
     tr  = '\xBB' ; //top-right
