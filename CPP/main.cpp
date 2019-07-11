@@ -1,5 +1,5 @@
-#include "header.h"
-#include "queue.h"
+#include "functions/header.h"
+#include "functions/queue.h"
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
