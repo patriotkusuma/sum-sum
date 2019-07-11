@@ -1,24 +1,8 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <fstream>
-#include <conio.h>
-#include <Windows.h>
-#include <cstdlib>
-#include <vector>
-#include <algorithm>
-#define SIZE 500
-#define MAX 50
-
+#include "header.h"
+#include "queue.h"
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
-
-
-struct queue{
-    int kode[MAX], head, tail;
-    std::string nama[MAX], alamat[MAX];
-}antrian;
 
 struct data{
     std::string ID;
