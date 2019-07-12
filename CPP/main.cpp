@@ -1,5 +1,5 @@
 #include "functions/header.h"
-#include "functions/queue.h"
+
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
@@ -10,6 +10,11 @@ struct data{
     int Tahun;
     double Harga;
 };
+
+struct queue{
+    int kode[MAX], head, tail;
+    std::string nama[MAX], alamat[MAX];
+}antrian;
 
 data Mobil[SIZE];
 std::vector<data> datas;
@@ -101,8 +106,6 @@ void deQueue(){
     draw();
     Tittle();
     gotoxy(4,6); std::cout << "MENU PANGGIL ANTRIAN";
-    std::string nama;
-    std::string alamat;
     gotoxy(4,7); std::cout << "ANTRIAN NO : ";
     gotoxy(5,8); std::cout << "Nama       : ";
     gotoxy(5,9); std::cout << "Alamat     : ";
@@ -371,8 +374,7 @@ void ManageAntrian(){
             print();
             break;
         case 4:
-            clear();
-            
+            clear(); 
             break;
         case 5: 
             MenuAwal();
@@ -498,10 +500,14 @@ void SearchData(){
             gotoxy(5,10); std::cout << "Merek   : "; std::cout << Mobil[i].Brand;
             gotoxy(5,11); std::cout << "Tahun   : "; std::cout << Mobil[i].Tahun;
             gotoxy(5,12); std::cout << "Harga   : "; std::cout << Mobil[i].Harga;
-
-        } else if(Mobil[i].ID != id){
-            gotoxy(5,10); std::cout << "Maaf data dengan ID" << id << "tidak ditemukan";
+            
+            gotoxy(4,22); system("pause");
+            MenuAwal();
+            break;
         }
+        // if(Mobil[i].ID != id){
+        //     gotoxy(5,10); std::cout << "Maaf data dengan ID" << id << "tidak ditemukan";
+        // }
     }
     gotoxy(4,22); system("pause");
     MenuAwal();
@@ -564,7 +570,7 @@ void SortingData(){
     gotoxy(64,6); std::cout << "HARGA";
     
     // std::sort(Mobil, Mobil + SIZE, acompare);
-    int x, k,  m, n;
+    int   m, n;
     data swap;
     for(n = 0; n<temp-1 ;n++ ){
         for(m=0; m<temp -1; m++){
@@ -655,6 +661,7 @@ void Exit(){
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
     gotoxy(4,22); std::cout << "> "; std::cin >>a;
     if(a=='y'||a=='Y'){
+
         system("cls");
     }
     if(a=='t'||a=='T'){
@@ -686,6 +693,9 @@ void DeleteData(){
     int re;
     recno = re - 1;
     gotoxy(4,22); std::cin>>recno1;
+    if(recno1=='b'||'B'){
+        ManageData();
+    }
     recno1--;
     records.erase(records.begin() + recno1);
     recno = records.size();
