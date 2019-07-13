@@ -133,7 +133,7 @@ void PrintBill(std::vector<DetailTransaction> details){
 	
 	os.close();
 	
-	system("start /min notepad /p bill.txt");
+	system("start /min notepad /p collections/bill.txt");
 }
 
 //queue
@@ -211,14 +211,14 @@ void init(){
     antrian.tail=0;
 }
 void print(){
+    system("cls");
     char hor,cl,cr;//border
+    hor = '\xCD' ; //horizontal-line
     cl  = '\xCC' ; //connector-left
     cr  = '\xB9' ; //connector-right
-
     std::string line(74, hor);
-    system("cls");
+
     draw();
-    gotoxy(2,8); std::cout << cl << line << cr;
     Tittle();
     gotoxy(4,6);std::cout << "DAFTAR ANTRIAN";
     int j=0;
@@ -226,6 +226,7 @@ void print(){
         gotoxy(5,7); std::cout << "NO";
         gotoxy(12,7);std::cout << "Nama";
         gotoxy(42,7); std::cout << "Alamat";
+        gotoxy(2,8); std::cout << cl << line << cr;
         for(int i=antrian.head; i<=antrian.tail-1;i++){
             gotoxy(5,9+j); std::cout << i + 1;
             gotoxy(12,9+j); std::cout <<antrian.nama[i];
