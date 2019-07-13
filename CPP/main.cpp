@@ -699,6 +699,9 @@ void SearchData(){
     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
     gotoxy(4,22); std::cin >> id;
+    if(id=="b"||"B"){
+        ManageData();
+    } else {
     for(int i = 0; i< temp; i++){
         if(Mobil[i].ID == id){
             gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
@@ -725,6 +728,7 @@ void SearchData(){
     }
     gotoxy(4,22); system("pause");
     MenuAwal();
+    }
    }
 
 void SortingData(){
