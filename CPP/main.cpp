@@ -92,7 +92,7 @@ void SaveTransaction(std::vector<pembeli> buyers){
 }
 
 void PrintBill(std::vector<DetailTransaction> details){
-    std::ofstream os("bill.txt");
+    std::ofstream os("collections/bill.txt");
     DetailTransaction bayar;
 
     os << "(|********************************************|)" << std::endl;
@@ -240,7 +240,7 @@ void print(){
 
 //Manage Data
 void LoadData(){
-    std::fstream is("items.txt");
+    std::fstream is("collections/items.txt");
 
     std::string item;
     while(std::getline(is, item)){
@@ -275,7 +275,7 @@ void UpdateData(){
     // LoadData();
     draw();
     Tittle();
-    std::ifstream is("items.txt");
+    std::ifstream is("collections/items.txt");
     std::string item;
     int i=0;
     int temp;
@@ -319,6 +319,9 @@ void UpdateData(){
     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
     gotoxy(4,22); std::cin >> id;
+    if(id=="b"||"B"){
+        ManageData();
+    }
     for(int i = 0; i!=temp; i++){
         if(Mobil[i].ID == id){
             gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
@@ -352,15 +355,15 @@ void UpdateData(){
     gotoxy(4,20); std::cout << "Tekan Enter untuk Kembali";
     gotoxy(4,22);
     std::cin.ignore();
-    std::ofstream os("temp.txt");
+    std::ofstream os("collections/temp.txt");
     for(int i = 0; i != temp; i++){
         os << Mobil[i].ID << "," << Mobil[i].Nama 
         << "," << Mobil[i].Brand << "," << Mobil[i].Tahun 
         << "," << Mobil[i].Harga << std::endl;
     }
     os.close();
-    remove("items.txt");
-    rename("temp.txt", "items.txt");
+    remove("collections/items.txt");
+    rename("collections/temp.txt", "collections/items.txt");
     ManageData();
     
 }
@@ -455,7 +458,7 @@ void ManageAntrian(){
 void TambahData(){
     awal:
     std::fstream stud;
-    stud.open("items.txt", std::ios::app);
+    stud.open("collections/items.txt", std::ios::app);
     system("cls");
     std::string ID,Nama,Brand,TahunTerbit, Harga;
     char pilihan;
@@ -525,7 +528,7 @@ data find_data(std::string id){
 }
 
 void SearchData(){
-    std::ifstream is("items.txt");
+    std::ifstream is("collections/items.txt");
     std::string item;
     int i=0;
     int temp;
@@ -591,7 +594,7 @@ void SearchData(){
 
 void SortingData(){
     
-    std::ifstream is("items.txt");
+    std::ifstream is("collections/items.txt");
     std::string item;
     int i=0;
     int temp;
@@ -724,7 +727,7 @@ void DeleteData(){
     
     std::vector<std::string> records;
     std::string line;
-    std::ifstream records_input("items.txt");
+    std::ifstream records_input("collections/items.txt");
     while(std::getline(records_input,line)){
         records.push_back(line);
     }
@@ -743,13 +746,13 @@ void DeleteData(){
     recno1--;
     records.erase(records.begin() + recno1);
     recno = records.size();
-    std::ofstream os("temp.txt");
+    std::ofstream os("collections/temp.txt");
     for(size_t i = 0; i != recno; i++){
         os << records[i] << std:: endl;
     }
     os.close();
-    remove("items.txt");
-    rename("temp.txt", "items.txt");
+    remove("collections/items.txt");
+    rename("collections/temp.txt", "collections/items.txt");
     system("cls");
     draw();
     Tittle();
