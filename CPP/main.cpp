@@ -53,7 +53,7 @@ void gotoxy(int x, int y);
 void gotoxy(int x, int y, std::string text);
 void ManageData();
 void MenuAwal();
-void Exit();
+void Keluar();
 void SaveTransaction(std::vector<pembeli> buyers);
 void PrintBill(std::vector<DetailTransaction> details);
 void ShowData(); //belum selesai
@@ -484,7 +484,7 @@ void UpdateData(){
 void MenuAwal(){
     awal:
     system("cls");
-    enum dipilih{Antri=1, MDat, SDat, Trans, Quit};
+    // enum dipilih{Antri=1, MDat, SDat, Trans, Quit=5};
     std::string a;
     draw();
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
@@ -497,37 +497,38 @@ void MenuAwal(){
     gotoxy(5,14); std::cout << "5. EXIT";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda :";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
-    if(a != "1" || "2" || "3" || "4" || "5"){
-        gotoxy(4,19); std::cout << "Masukkan Pilihan dengan benar";
+    for(int i = 0; i < a.length(); i ++){
+        if(isdigit(a[i]) == false ){
+            gotoxy(4,19); std::cout << "Masukkan Pilihan dengan benar";
         gotoxy(4,22); system("pause");
         goto awal;
-    }
-    int pilih;
-    pilih = stoi(a);
-    while(pilih != Quit){
+        } else {
+        int pilih;
+        pilih = stoi(a);
+            switch(pilih){
+                case 1:
+                    ManageAntrian();
+                    break;
+                case 2:
+                    ManageData();
+                    break;
+                case 3:
+                    SearchData();
+                    break;
+                case 4:
+                    doTransaction();
+                    break;
+                case 5:
+                    Keluar();
+                    break;
+                default:
+                    gotoxy(4,19); std::cout << "Data yang anda masukkan salah";
+                    gotoxy(4,22); system("pause");
+                    goto awal;
+            }
 
-    switch(pilih){
-        case Antri:
-            ManageAntrian();
-            break;
-        case MDat:
-            ManageData();
-            break;
-        case SDat:
-            SearchData();
-            break;
-        case Trans:
-            doTransaction();
-            break;
-        case Quit:
-            Exit();
-            break;
-        default:
-            gotoxy(4,19); std::cout << "Data yang anda masukkan salah";
-            gotoxy(4,22); system("pause");
-            goto awal;
-    }
-    }
+        }
+    } 
 }
 bool repeat= true;
 
@@ -1295,7 +1296,7 @@ void DrawForm(){
 }
 
 
-void Exit(){
+void Keluar(){
     system("cls");
     draw();
     char a;
@@ -1325,5 +1326,4 @@ void Exit(){
     if(a=='t'||a=='T'){
         MenuAwal();
     }
-    
 }
