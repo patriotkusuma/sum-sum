@@ -11,6 +11,7 @@ struct data{
     double Harga;
 };
 
+
 struct queue{
     int kode[MAX], head, tail;
     std::string nama[MAX], alamat[MAX];
@@ -19,10 +20,17 @@ struct queue{
 data Mobil[SIZE];
 std::vector<data> datas;
 
+
 struct DetailTransaction{
     data item;
     double qty;
     double pay;
+};
+
+struct pembeli{
+    DetailTransaction detail;
+    std::string Nama;
+    std::string Alamat;
 };
 
 void login();
@@ -34,6 +42,8 @@ void gotoxy(int x, int y, std::string text);
 void ManageData();
 void MenuAwal();
 void Exit();
+void SaveTransaction(std::vector<pembeli> buyers);
+void PrintBill(std::vector<DetailTransaction> details);
 void ShowData(); //belum selesai
 void SearchData();
 void TambahData();
@@ -69,6 +79,62 @@ int main() {
     return 0;
 }
 
+void SaveTransaction(std::vector<pembeli> buyers){
+    std::fstream os;
+    os.open("transactions.txt", std::ios::app);
+    DetailTransaction bayar;
+    for(auto i : buyers){
+        os  << i.Nama<<"," << i.Alamat <<","
+        << i.detail.item.ID << ","<<i.detail.item.Nama<<","
+        << i.detail.qty << std::endl;; 
+    }
+
+}
+
+void PrintBill(std::vector<DetailTransaction> details){
+    std::ofstream os("bill.txt");
+    DetailTransaction bayar;
+
+    os << "(|********************************************|)" << std::endl;
+	os << "(|--------------------------------------------|)" << std::endl;
+	os << "(|    +                                  +    |)" << std::endl;
+	os << "(|    +	  ------ Delaer  Yu-Sum ------   +    |)" << std::endl;
+	os << "(|    +	  -------- YOGYAKARTA --------   +    |)" << std::endl;
+	os << "(|    +                                  +    |)" << std::endl;
+	os << "(|--------------------------------------------|)" << std::endl;
+	
+	double total = 0;
+	for(DetailTransaction d : details)
+	{
+		double sub = d.qty * d.item.Harga;
+		total += sub;
+		os <<"(|  " <<std::setiosflags(std::ios::left) << std::setw(42) << d.item.Nama;
+		os << "|)";
+		os << std::endl;
+		os << "(|  "<<std::setiosflags(std::ios::right)<< std::setw(3) << d.qty;
+		os <<std::setw(3) << "x";
+		os << std::setw(11) << d.item.Harga;
+		os << std::setw(22) << sub;
+		os << "   |)";
+		os << std::resetiosflags(std::ios::right)<<std::endl;
+	}
+	os << "(|--------------------------------------------|)" << std::endl;
+	os << std::setiosflags(std::ios::left) << std::setw(19) << "(|";
+	os << std::setw(14) << "Total Harga :";
+	os <<std::setiosflags(std::ios::right)<< std::setw(10) << total << "   |)"<< std::endl <<std::resetiosflags(std::ios::right);
+	os << "(|--------------------------------------------|)" << std::endl;
+	os << "(|  Instagram : @YUSUM_FRUITS                 |)" << std::endl;
+	os << "(|  Phone     : 0879837213475                 |)" <<std::endl;
+	os << "(|--------------------------------------------|)" << std::endl;
+	os << "(|    $--- Terima Kasih  Telah Mampir ---$    |)" << std::endl;
+	os << "(|       $--- TIDAK MENERIMA RETUR ---$       |)" << std::endl;
+	os << "(|********************************************|)" << std::endl;
+
+	
+	os.close();
+	
+	system("start /min notepad /p bill.txt");
+}
 
 //queue
 void inQueue(){
@@ -784,6 +850,7 @@ void TransactionFromQueue(){
     double sub = 0;
     double total = 0;
     std::vector<DetailTransaction> details;
+    std::vector<pembeli> buyers;
     int j =0;
     gotoxy(45, 2); std::cout << "NAMA   : ";
     gotoxy(45, 3); std::cout << "Alamat : ";
@@ -839,6 +906,7 @@ void TransactionFromQueue(){
             qty = stod(in_qty);
         
         details.push_back({{i.ID, i.Nama, i.Brand, i.Tahun, i.Harga}, qty});
+        buyers.push_back({{{i.ID, i.Nama,i.Brand,i.Tahun,i.Harga}, qty,}, nama, alamat});
         j++;
     }
 
@@ -953,6 +1021,7 @@ void InputForm(){
     double sub = 0;
     double total = 0;
     std::vector<DetailTransaction> details;
+    std::vector<pembeli> buyers;
     int j =0;
     gotoxy(45, 2); std::cout << "NAMA   : ";
     gotoxy(45, 3); std::cout << "Alamat : ";
@@ -1008,6 +1077,7 @@ void InputForm(){
             qty = stod(in_qty);
         
         details.push_back({{i.ID, i.Nama, i.Brand, i.Tahun, i.Harga}, qty});
+        buyers.push_back({{{i.ID, i.Nama,i.Brand,i.Tahun,i.Harga}, qty,}, nama, alamat});
         j++;
     }
 
@@ -1022,7 +1092,8 @@ void InputForm(){
     bayar.pay = stod(in_pay);
     gotoxy(56,31); std::cout << bayar.pay;
     gotoxy(56,31); std::cout << bayar.pay - total;
-
+    PrintBill(details);
+    SaveTransaction(buyers);
     gotoxy(4,34); std::cout << "> ";
 
     // std::fstream trs;
@@ -1102,17 +1173,14 @@ void Exit(){
     gotoxy(62,15); std::cout << "[18.11.1814]";
     gotoxy(5,16); std::cout << "[7] Sumiyati";
     gotoxy(62,16); std::cout << "[18.11.1810]";
-
-
-
-
     gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
     gotoxy(4,22); std::cout << "> "; std::cin >>a;
     if(a=='y'||a=='Y'){
-
         system("cls");
+        exit(1);
     }
     if(a=='t'||a=='T'){
         MenuAwal();
     }
+    
 }
