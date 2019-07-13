@@ -482,9 +482,10 @@ void UpdateData(){
 }
 
 void MenuAwal(){
-    int a;
     awal:
     system("cls");
+    enum dipilih{Antri=1, MDat, SDat, Trans, Quit};
+    std::string a;
     draw();
     gotoxy(31,3); std::cout << "SUM-SUM DEALER";
     gotoxy(4,6); std::cout << "SELAMAT DATANG";
@@ -493,29 +494,39 @@ void MenuAwal(){
     gotoxy(5,11); std::cout << "2. Manage Data";
     gotoxy(5,12); std::cout << "3. Search Data";
     gotoxy(5,13); std::cout << "4. Transaction";
-    gotoxy(5,14); std::cout << "9. EXIT";
+    gotoxy(5,14); std::cout << "5. EXIT";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda :";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
-    switch(a){
-        case 1:
+    if(a != "1" || "2" || "3" || "4" || "5"){
+        gotoxy(4,19); std::cout << "Masukkan Pilihan dengan benar";
+        gotoxy(4,22); system("pause");
+        goto awal;
+    }
+    int pilih;
+    pilih = stoi(a);
+    while(pilih != Quit){
+
+    switch(pilih){
+        case Antri:
             ManageAntrian();
             break;
-        case 2:
+        case MDat:
             ManageData();
             break;
-        case 3:
-            SortingData();
+        case SDat:
+            SearchData();
             break;
-        case 4:
+        case Trans:
             doTransaction();
             break;
-        case 9:
+        case Quit:
             Exit();
             break;
         default:
             gotoxy(4,19); std::cout << "Data yang anda masukkan salah";
             gotoxy(4,22); system("pause");
             goto awal;
+    }
     }
 }
 bool repeat= true;
