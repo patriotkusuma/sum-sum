@@ -5,7 +5,7 @@ Project ini merupakan tugas akhir dari Mata Kuliah Struktur Data
 
 File Project berada di dalam folder CPP
 
-Untuk Compile disarankan untuk menggunakan compile **C++ versi 11**
+Untuk Compile disarankan untuk menggunakan format compile **C++ versi 11**
 
 contohnya seperti berikut ini : 
 
