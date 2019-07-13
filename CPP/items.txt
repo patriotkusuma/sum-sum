@@ -20,5 +20,3 @@ VOL03,Volkswagen Combi,VOLKSWAGEN,1950,215000
 VOL04,Volkswagen Polo,VOLKSWAGEN,2018,225000
 VOL05,Volkswagen Scirocco,VOLKSWAGEN,2017,250000
 VW002,Volskwagen Kodok,Volskwagen,1984,10000
-gsgsfg,fgfgs,fgssg,21,212132
-fgd,gfdg,gfg,21,121323

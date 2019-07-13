@@ -4,9 +4,10 @@
 #include <string>
 #include <fstream>
 #include <conio.h>
-#include <Windows.h>
 #include <cstdlib>
 #include <vector>
 #include <algorithm>
+#include "pos.h"
+#include "drawing.h"
 #define SIZE 500
 #define MAX 50

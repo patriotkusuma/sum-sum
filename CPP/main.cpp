@@ -1,4 +1,4 @@
-#include "functions/header.h"
+#include "functions/libs.h"
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
@@ -402,27 +402,37 @@ void TambahData(){
     gotoxy(6,11); std::cout << "Brand         : "; 
     gotoxy(6,12); std::cout << "Tahun Terbit  : "; 
     gotoxy(6,13); std::cout << "Harga         : "; 
+    std::cin.ignore();
     gotoxy(22,9); std::getline(std::cin, ID);
         if(ID==""){
-            gotoxy(6,10); std::cout << "Harap Masukkan ID";
+            gotoxy(22,9); std::cout << "Harap Masukkan ID";
+            gotoxy(4,22); system("pause");
             goto awal;
         } 
+
     gotoxy(22,10); std::getline(std::cin, Nama);
         if(Nama==""){
-            gotoxy(6,11); std::cout << "Harap Masukkan Nama";
+            gotoxy(22,10); std::cout << "Harap Masukkan Nama";
+            gotoxy(4,22); system("pause");
             goto awal;
         }
-    gotoxy(22,11); std::cin>> Brand;
+    gotoxy(22,11); std::getline(std::cin, Brand);
         if(Brand==""){
-            std::cout << "Harap Masukkan Brand";
+            gotoxy(22,11);std::cout << "Harap Masukkan Brand";
+            gotoxy(4,22); system("pause");
+            goto awal;
         }
-    gotoxy(22,12); std::cin >> TahunTerbit;
+    gotoxy(22,12); std::getline(std::cin, TahunTerbit);
         if(TahunTerbit==""){
-            std::cout << "Harap Masukkan Tahun Terbit";
+            gotoxy(22,12);std::cout << "Harap Masukkan Tahun Terbit";
+            gotoxy(4,22); system("pause");
+            goto awal;
         }
-    gotoxy(22,13); std::cin >> Harga;
+    gotoxy(22,13); std::getline(std::cin, Harga);
         if(Harga==""){
-            std::cout << "Harap Masukkan Harga";
+            gotoxy(22,13);std::cout << "Harap Masukkan Harga";
+            gotoxy(4,22); system("pause");
+            goto awal;
         }
     gotoxy(4,20); std::cout << "Apakah anda yakin ingin menyimpan?(Y/T)";
     gotoxy(4,22);std::cin >> pilihan;
@@ -633,41 +643,7 @@ void ShowData(){
     ManageData();
 }
 
-void Exit(){
-    system("cls");
-    draw();
-    char a;
-    Tittle();
-    gotoxy(4,6); std::cout << "GOOD BYE";
-    gotoxy(5,8); std::cout << "Aplikasi ini dibuat oleh : ";
-    gotoxy(5,10); std::cout << "[1] Patriot Kusuma Sejati";
-    gotoxy(62,10); std::cout << "[18.11.1819]";
-    gotoxy(5,11); std::cout << "[2] Vito Nur Ariyanto";
-    gotoxy(62,11); std::cout << "[18.11.1830]";
-    gotoxy(5,12); std::cout << "[3] Anselmus Rusdiatmaja";
-    gotoxy(62,12); std::cout << "[18.11.1856]";
-    gotoxy(5,13); std::cout << "[4] Sidiq Agung Maridia";
-    gotoxy(62,13); std::cout << "[18.11.1871]";
-    gotoxy(5,14); std::cout << "[5] Yesica Jacinda Asmara Devi";
-    gotoxy(62,14); std::cout << "[18.11.1853]";
-    gotoxy(5,15); std::cout << "[6] Marsha Recha Hapsari";
-    gotoxy(62,15); std::cout << "[18.11.1814]";
-    gotoxy(5,16); std::cout << "[7] Sumiyati";
-    gotoxy(62,16); std::cout << "[18.11.1810]";
 
-
-
-
-    gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
-    gotoxy(4,22); std::cout << "> "; std::cin >>a;
-    if(a=='y'||a=='Y'){
-
-        system("cls");
-    }
-    if(a=='t'||a=='T'){
-        MenuAwal();
-    }
-}
 
 void DeleteData(){
     datas.clear();
@@ -690,16 +666,17 @@ void DeleteData(){
 
     size_t recno = records.size();
     size_t recno1;
+    std::string nomor;
     int re;
     recno = re - 1;
-    gotoxy(4,22); std::cin>>recno1;
-    if(recno1=='b'||'B'){
+    gotoxy(4,22); std::cin>>nomor;
+    if(nomor=="b"){
         ManageData();
     }
+    recno1 = stoi(nomor);   
     recno1--;
     records.erase(records.begin() + recno1);
     recno = records.size();
-    
     std::ofstream os("temp.txt");
     for(size_t i = 0; i != recno; i++){
         os << records[i] << std:: endl;
@@ -707,6 +684,14 @@ void DeleteData(){
     os.close();
     remove("items.txt");
     rename("temp.txt", "items.txt");
+    system("cls");
+    draw();
+    Tittle();
+    gotoxy(4,6); std::cout << "MENU DELETE DATA";
+    gotoxy(4,7); std::cout << "Data sudah terhapus";
+    gotoxy(4,20); std::cout << "Tekan Enter untuk kembali";
+    gotoxy(4,22); system("pause");
+    
     ManageData();
 }
 
@@ -956,25 +941,6 @@ void draw(){
     gotoxy(2,21);
     std::cout << cl << line << cr;
 
-    // gotoxy(2,3);
-    // std::cout << cl << line << cr;
-    // //
-    // // gotoxy(9,3);
-    // std::cout << ct;
-    // gotoxy(9,4);
-    // std::cout << ver;
-    // gotoxy(9,5);
-    // std::cout << cb;
-    // //
-    // gotoxy(42, 3);
-    // std::cout << ct;
-    // gotoxy(42, 4);
-    // std::cout << ver;
-    // gotoxy(42, 5);
-    // std::cout << cb;
-
-    // //
-    // gotoxy()
     
 }
 
@@ -1112,4 +1078,41 @@ void DrawForm(){
     gotoxy(56,6); std::cout << "QTY";
     gotoxy(66,6); std::cout << "Sub";
     
+}
+
+
+void Exit(){
+    system("cls");
+    draw();
+    char a;
+    Tittle();
+    gotoxy(4,6); std::cout << "GOOD BYE";
+    gotoxy(5,8); std::cout << "Aplikasi ini dibuat oleh : ";
+    gotoxy(5,10); std::cout << "[1] Patriot Kusuma Sejati";
+    gotoxy(62,10); std::cout << "[18.11.1819]";
+    gotoxy(5,11); std::cout << "[2] Vito Nur Ariyanto";
+    gotoxy(62,11); std::cout << "[18.11.1830]";
+    gotoxy(5,12); std::cout << "[3] Anselmus Rusdiatmaja";
+    gotoxy(62,12); std::cout << "[18.11.1856]";
+    gotoxy(5,13); std::cout << "[4] Sidiq Agung Maridia";
+    gotoxy(62,13); std::cout << "[18.11.1871]";
+    gotoxy(5,14); std::cout << "[5] Yesica Jacinda Asmara Devi";
+    gotoxy(62,14); std::cout << "[18.11.1853]";
+    gotoxy(5,15); std::cout << "[6] Marsha Recha Hapsari";
+    gotoxy(62,15); std::cout << "[18.11.1814]";
+    gotoxy(5,16); std::cout << "[7] Sumiyati";
+    gotoxy(62,16); std::cout << "[18.11.1810]";
+
+
+
+
+    gotoxy(4,20); std::cout << "APAKAH YAKIN INGIN KELUAR (Y/T)";
+    gotoxy(4,22); std::cout << "> "; std::cin >>a;
+    if(a=='y'||a=='Y'){
+
+        system("cls");
+    }
+    if(a=='t'||a=='T'){
+        MenuAwal();
+    }
 }
