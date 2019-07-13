@@ -43,7 +43,7 @@ struct Transaksi{
 
 
 
-
+void LihatChoice();
 void ShowPembeli();
 void login();
 void Tittle();
@@ -63,7 +63,7 @@ void ManageAntrian();
 void DrawForSort(int dr);
 void DrawForm();
 void InputForm();
-void TransactionFromQueue();
+void TransactionFromQueue(std::string nama, std::string alamat);
 void UpdateData();
 void doTransaction();
 void DeleteData();
@@ -89,6 +89,45 @@ int main() {
     login();
     MenuAwal();
     return 0;
+}
+
+void LihatChoice(){
+    awal:
+    system("cls");
+    draw();
+    Tittle();
+    std::string a;
+    gotoxy(4,6); std::cout <<"MANAGE DATA";
+    gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
+    gotoxy(5,10); std::cout << "[1] Data Mobil";
+    gotoxy(5,11); std::cout << "[2] Pembeli";
+    gotoxy(5,12); std::cout << "[3] Sort Data by Name";
+    gotoxy(5,16); std::cout << "[9] Kembali";
+    gotoxy(4,20); std::cout << "Masukkan pilihan anda : ";
+    gotoxy(4,22); std::cout << "> "; std::cin>>a;
+    for(int i = 0; i < a.length(); i ++){
+        if(isdigit(a[i]) == false ){
+            gotoxy(4,19); std::cout << "Masukkan Pilihan dengan benar";
+        gotoxy(4,22); system("pause");
+        goto awal;
+        } else {
+            int pilihan;
+            pilihan = stoi(a);
+            switch(pilihan){
+                case 1:
+                    ShowData();
+                    break;
+                case 2:
+                    ShowPembeli();
+                    break;
+                case 3:
+                    SortingData();
+                    break;
+                case 9: 
+                    ManageData();
+            }
+        }
+    }
 }
 
 void ShowPembeli(){
@@ -244,14 +283,17 @@ void inQueue(){
 
 }
 void clear(){
-    antrian.head=-1;
-    antrian.tail=-1;
+    antrian.head=0;
+    antrian.tail=0;
+    gotoxy(4,19); std::cout << "Data sudah Terhapus dengan sempurna";
+    gotoxy(4,22); system("pause");
     ManageAntrian();
 }
 void deQueue(){
     system("cls");
     draw();
     Tittle();
+    std::string nama, alamat;
     gotoxy(4,6); std::cout << "MENU PANGGIL ANTRIAN";
     gotoxy(4,7); std::cout << "ANTRIAN NO : ";
     gotoxy(5,8); std::cout << "Nama       : ";
@@ -262,7 +304,8 @@ void deQueue(){
             gotoxy(19,9); std::cout << antrian.alamat[antrian.head];
             gotoxy(4,22);
             getchar(); 
-
+            nama = antrian.nama[antrian.head];
+            alamat = antrian.alamat[antrian.head];
         for(int i=antrian.head;i<antrian.tail;i++){
             antrian.nama[i]=antrian.nama[i+1];
             antrian.alamat[i]=antrian.alamat[i+1];
@@ -271,9 +314,11 @@ void deQueue(){
     }else{
         gotoxy(5,10); std::cout << "Data sudah penuh";
     }
+
     gotoxy(4,22);
     getch();
-    ManageAntrian();
+    TransactionFromQueue(nama, alamat);
+    // ManageAntrian();
 }
 bool isFull(){
     if(antrian.tail==MAX)
@@ -402,7 +447,9 @@ void UpdateData(){
     gotoxy(4,22); std::cin >> id;
     if(id=="b"){
         ManageData();
-    } 
+    } else if(id == "B"){
+        ManageData();
+    }
     else{
 
     for(int i = 0; i!=temp; i++){
@@ -443,17 +490,17 @@ void UpdateData(){
             Mobil[i].Harga = harga;
 
         }
-        else if(Mobil[i].ID != id){
-            system("cls");
-            draw();
-            Tittle();
-            gotoxy(4,6); std::cout << "MENU UPDATE DATA";
-            gotoxy(4,7); std::cout << "Harap Masukkan ID yang benar";
-            gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
-            gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
-            gotoxy(4,22); system("pause");
-            ManageData();
-        }
+        // else if(Mobil[i].ID != id){
+        //     system("cls");
+        //     draw();
+        //     Tittle();
+        //     gotoxy(4,6); std::cout << "MENU UPDATE DATA";
+        //     gotoxy(4,7); std::cout << "Harap Masukkan ID yang benar";
+        //     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+        //     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+        //     gotoxy(4,22); system("pause");
+        //     ManageData();
+        // }
 
     }
     getchar();
@@ -552,11 +599,11 @@ void ManageAntrian(){
     gotoxy(4,6); std::cout << "MANAGE ANTRIAN";
     gotoxy(4,7); std::cout << "Silakan pilih menu yang diinginkan";
     do{
-        gotoxy(5,10); std::cout << "1. Registrasi Antrian";
-        gotoxy(5,11); std::cout << "2. Panggil Antrian";
-        gotoxy(5,12); std::cout << "3. Lihat Antrian";
-        gotoxy(5,13); std::cout << "4. Hapus Antrian";
-        gotoxy(5,14); std::cout << "5. Kembali";
+        gotoxy(5,10); std::cout << "[1] Registrasi Antrian";
+        gotoxy(5,11); std::cout << "[2] Panggil Antrian";
+        gotoxy(5,12); std::cout << "[3] Lihat Antrian";
+        gotoxy(5,13); std::cout << "[4] Hapus Antrian";
+        gotoxy(5,14); std::cout << "[5] Kembali";
         gotoxy(4,22); std::cout << "> ";std::cin >> pilihan;
         switch (pilihan)
         {
@@ -655,6 +702,7 @@ data find_data(std::string id){
 }
 
 void SearchData(){
+    awal:
     std::ifstream is("collections/items.txt");
     std::string item;
     int i=0;
@@ -698,11 +746,18 @@ void SearchData(){
     gotoxy(4,7); std::cout << "Harap Masukkan ID yang ingin dicari";
     gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+    std::cin.ignore();
     gotoxy(4,22); std::cin >> id;
-    if(id=="b"||"B"){
-        ManageData();
-    } else {
-    for(int i = 0; i< temp; i++){
+    if(id=="b"){
+
+        gotoxy(4,22); 
+        MenuAwal();
+
+    } else if(id == "B"){
+        MenuAwal();
+    }
+    else {
+    for(int i = 0; i <= temp; i++){
         if(Mobil[i].ID == id){
             gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
             gotoxy(5,9); std::cout << "Nama    : "; std::cout << Mobil[i].Nama;
@@ -712,19 +767,18 @@ void SearchData(){
             
             gotoxy(4,22); system("pause");
             MenuAwal();
-            break;
+            
         }
-        else if(Mobil[i].ID == id){
-            system("cls");
-            draw();
-            Tittle();
-            gotoxy(4,6); std::cout << "MENU UPDATE DATA";
-            gotoxy(4,7); std::cout << "Harap Masukkan ID yang benar";
-            gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
-            gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
-            gotoxy(4,22); system("pause");
-            ManageData();
-        }
+
+        // system("cls");
+        // draw();
+        // Tittle();
+        // gotoxy(4,6); std::cout << "MENU Search DATA";
+        // gotoxy(15,15); std::cout << "Harap Masukkan ID yang benar";
+        // gotoxy(4,19); std::cout << "Masukkan ID dibawah ini :";
+        // gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
+        // gotoxy(4,22); system("pause");
+        // goto awal;
     }
     gotoxy(4,22); system("pause");
     MenuAwal();
@@ -912,13 +966,11 @@ void ManageData(){
     Tittle();
     gotoxy(4,6); std::cout <<"MANAGE DATA";
     gotoxy(4,7); std::cout <<"Silakan Pilih Menu yang diinginkan";
-    gotoxy(5,10); std::cout << "1. Tambah Data";
-    gotoxy(5,11); std::cout << "2. Lihat Data";
-    gotoxy(5,12); std::cout << "3. Sorting Data by Name";
-    gotoxy(5,13); std::cout << "4. Update Data";
-    gotoxy(5,14); std::cout << "5. Delete Data";
-    gotoxy(5,15); std::cout << "6. Show Data Pembeli";
-    gotoxy(5,16); std::cout << "9. Kembali";
+    gotoxy(5,10); std::cout << "[1] Tambah Data";
+    gotoxy(5,11); std::cout << "[2] Lihat Data";
+    gotoxy(5,12); std::cout << "[3] Update Data";
+    gotoxy(5,13); std::cout << "[4] Delete Data";
+    gotoxy(5,16); std::cout << "[9] Kembali";
     gotoxy(4,20); std::cout << "Masukkan pilihan anda : ";
     gotoxy(4,22); std::cout << "> "; std::cin>>a;
     switch (a)
@@ -927,19 +979,13 @@ void ManageData(){
         TambahData();
         break;
     case 2: 
-        ShowData();
+        LihatChoice();
         break;
     case 3:
-        SortingData();
-        break;
-    case 4:
         UpdateData();
         break;
-    case 5:
+    case 4:
         DeleteData();
-        break;
-    case 6:
-        ShowPembeli();
         break;
     case 9:
         MenuAwal();
@@ -989,12 +1035,10 @@ void gotoxy(int x, int y){
     SetConsoleCursorPosition(console,CursorPosition);
 }
 
-void TransactionFromQueue(){
+void TransactionFromQueue(std::string nama, std::string alamat){
     LoadData();
     system("cls");
     DrawForm();
-    std::string nama;
-    std::string alamat;
     double sub = 0;
     double total = 0;
     std::vector<DetailTransaction> details;
@@ -1002,12 +1046,12 @@ void TransactionFromQueue(){
     int j =0;
     gotoxy(45, 2); std::cout << "NAMA   : ";
     gotoxy(45, 3); std::cout << "Alamat : ";
-    std::cin.ignore();
-    gotoxy(53, 2); std::getline(std::cin, nama);
-    gotoxy(53, 3); std::getline(std::cin, alamat);
+    gotoxy(53, 2); std::cout << nama;
+    gotoxy(53, 3); std::cout << alamat;
     int i=0;
     while(true){
         for(auto d:details){
+            
             gotoxy(4,8 + i); std::cout << d.item.ID;
             gotoxy(14,8 + i); std::cout << d.item.Nama;
             gotoxy(45, 8 + i); std::cout << d.item.Harga;
@@ -1069,7 +1113,8 @@ void TransactionFromQueue(){
     bayar.pay = stod(in_pay);
     gotoxy(56,31); std::cout << bayar.pay;
     gotoxy(56,31); std::cout << bayar.pay - total;
-
+    PrintBill(details);
+    SaveTransaction(buyers);
     gotoxy(4,34); std::cout << "> ";
 
     // std::fstream trs;
@@ -1175,6 +1220,9 @@ void InputForm(){
     gotoxy(45, 3); std::cout << "Alamat : ";
     std::cin.ignore();
     gotoxy(53, 2); std::getline(std::cin, nama);
+    if(nama==""){
+        MenuAwal();
+    }
     gotoxy(53, 3); std::getline(std::cin, alamat);
     int i=0;
     while(true){
