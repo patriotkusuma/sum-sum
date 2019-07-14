@@ -631,6 +631,8 @@ void ManageAntrian(){
 
 void TambahData(){
     awal:
+    datas.clear();
+    LoadData();
     std::fstream stud;
     stud.open("collections/items.txt", std::ios::app);
     system("cls");
@@ -652,6 +654,14 @@ void TambahData(){
             gotoxy(4,22); system("pause");
             goto awal;
         } 
+
+        for(auto i: datas){
+            if(i.ID == ID){
+                gotoxy(22,9); std::cout << "ID sudah pernah dipakai";
+                gotoxy(4,22); system("pause");
+                goto awal;
+            }
+        }
 
     gotoxy(22,10); std::getline(std::cin, Nama);
         if(Nama==""){
@@ -912,42 +922,45 @@ void ShowData(){
 void DeleteData(){
     datas.clear();
     system("cls");
+
+    std::ofstream os;
+    os.open ("collections/temps.txt");
     LoadData();
     draw();
     Tittle();
     gotoxy(4,6); std::cout << "MENU DELETE DATA";
-    gotoxy(4,7); std::cout << "Data keberapa yang akan dihapus";
+    gotoxy(4,7); std::cout << "ID yang akan dihapus";
     gotoxy(4,19); std::cout << "Masukkan pada kolom di bawah ini :";
     gotoxy(4,20); std::cout << "masukkan b/B untuk kembali";
-    
-    std::vector<std::string> records;
-    std::string line;
-    std::ifstream records_input("collections/items.txt");
-    while(std::getline(records_input,line)){
-        records.push_back(line);
+    std::string id;
+    std::cin.ignore(); gotoxy(4,22);
+    std::getline(std::cin, id);
+    for( auto i : datas){
+        if(i.ID == id){
+            gotoxy(5,10); std::cout << "ID      : ";
+            std::cout << i.ID;
+            gotoxy(5,11); std::cout << "Nama    : ";
+            std::cout << i.Nama;
+            gotoxy(5,12); std::cout << "Brand   : ";
+            std::cout << i.Brand;
+            gotoxy(5,13); std::cout << "Tahun   : ";
+            std::cout << i.Tahun;
+            gotoxy(5,14); std::cout << "Harga   : ";
+            std::cout << i.Harga;
+            gotoxy(4,22); system("pause");
+        }
+        if(i.ID != id){
+            os << i.ID << "," ;
+            os<< i.Nama << ",";
+            os<< i.Brand << ",";
+            os<< i.Tahun << ",";
+            os<< i.Harga << "\n";
+        }
     }
-    records_input.close();
 
-    size_t recno = records.size();
-    size_t recno1;
-    std::string nomor;
-    int re;
-    recno = re - 1;
-    gotoxy(4,22); std::cin>>nomor;
-    if(nomor=="b"){
-        ManageData();
-    }
-    recno1 = stoi(nomor);   
-    recno1--;
-    records.erase(records.begin() + recno1);
-    recno = records.size();
-    std::ofstream os("collections/temp.txt");
-    for(size_t i = 0; i != recno; i++){
-        os << records[i] << std:: endl;
-    }
     os.close();
     remove("collections/items.txt");
-    rename("collections/temp.txt", "collections/items.txt");
+    rename("collections/temps.txt", "collections/items.txt");
     system("cls");
     draw();
     Tittle();
