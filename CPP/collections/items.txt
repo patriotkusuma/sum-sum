@@ -37,7 +37,6 @@ VOL02,Volkswagen Golf,VOLKSWAGEN,2010,250000
 VOL03,Volkswagen Combi,VOLKSWAGEN,1950,215000
 VOL04,Volkswagen Polo,VOLKSWAGEN,2018,225000
 VOL05,Volkswagen Scirocco,VOLKSWAGEN,2017,250000
-VW001,Volskwagen Kodok,Volskwagen,1984,10000
 MRS01,Suzuki karimun Estilo,Maruti Suzuki,2001,324000
 MRS02,Suzuki Alto,Maruti Suzuki,1979,250000
 MTS01,Mitsubishi Xpander,Mitsubishi,2013,200000
