@@ -293,6 +293,7 @@ void deQueue(){
     system("cls");
     draw();
     Tittle();
+    char pil;
     std::string nama, alamat;
     gotoxy(4,6); std::cout << "MENU PANGGIL ANTRIAN";
     gotoxy(4,7); std::cout << "ANTRIAN NO : ";
@@ -314,10 +315,20 @@ void deQueue(){
     }else{
         gotoxy(5,10); std::cout << "Data sudah penuh";
     }
-
-    gotoxy(4,22);
-    getch();
-    TransactionFromQueue(nama, alamat);
+    gotoxy(4,20); std::cout << "Lanjut ke menu Transaksi? (Y/T)";
+    gotoxy(4,22); std::cout <<">";std::cin >> pil;
+    if(pil == 'Y'){
+        TransactionFromQueue(nama, alamat);
+    }
+    if(pil == 'y'){
+        TransactionFromQueue(nama, alamat);
+    }
+    if(pil == 'T'){
+        ManageAntrian();
+    }
+    if(pil == 't'){
+        ManageAntrian();
+    }
     // ManageAntrian();
 }
 bool isFull(){
