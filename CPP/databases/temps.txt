@@ -43,4 +43,4 @@ MTS01,Mitsubishi Xpander,Mitsubishi,2013,200000
 MTS02,Mitsubishi Pajero Sport,Mitsubishi,2011,250000
 MTS03,Mitsubishi Delica,Mitsubishi,2005,400000
 VW002,Volskwagen Kodok,Volskwagen,1984,10000
-BMW01,BMW I8,BMW,2019,12345
+BMW01,BMW01,BMW01,2019,12345

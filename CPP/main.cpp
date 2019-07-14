@@ -454,6 +454,7 @@ void UpdateData(){
 
     for(int i = 0; i!=temp; i++){
         if(Mobil[i].ID == id){
+           
             std::string kode,nama,brand;
             int tahun,harga;
             gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
@@ -513,15 +514,16 @@ void UpdateData(){
     gotoxy(4,20); std::cout << "Tekan Enter untuk Kembali";
     gotoxy(4,22);
     std::cin.ignore();
-    std::ofstream os("databases/temp.txt");
+    std::ofstream os("databases/temps.txt");
     for(int i = 0; i != temp; i++){
-        os << Mobil[i].ID << "," << Mobil[i].Nama 
-        << "," << Mobil[i].Brand << "," << Mobil[i].Tahun 
-        << "," << Mobil[i].Harga << std::endl;
+        os << Mobil[i].ID << ",";
+        os << Mobil[i].Nama << ",";
+        os << Mobil[i].Brand << ",";
+        os << Mobil[i].Tahun << ",";
+        os << Mobil[i].Harga << std::endl;
     }
-    os.close();
-    remove("databases/items.txt");
-    rename("databases/temp.txt", "databases/items.txt");
+    os.close(); remove("databases/items.txt");
+    rename("databases/temps.txt", "databases/items.txt");
     ManageData();
     
     
@@ -654,6 +656,12 @@ void TambahData(){
             gotoxy(4,22); system("pause");
             goto awal;
         } 
+        if(ID=="b"){
+            ManageData();
+        }
+        if(ID=="B"){
+            ManageData();
+        }
 
         for(auto i: datas){
             if(i.ID == ID){
@@ -689,12 +697,20 @@ void TambahData(){
         }
     gotoxy(4,20); std::cout << "Apakah anda yakin ingin menyimpan?(Y/T)";
     gotoxy(4,22);std::cin >> pilihan;
-    if(pilihan=='y'||'Y'){
-        stud<<ID<<","<<Nama<<","<<Brand<<","<<TahunTerbit<<","<<Harga<<'\n';
-        stud.close();
+    if(pilihan=='t'){
         ManageData();
     }
-    if(pilihan=='t'||'T'){
+    if(pilihan=='T'){
+        ManageData();
+    }
+    if(pilihan=='Y'){
+        stud<<ID<<","<<Nama<<","<<Brand<<","<<TahunTerbit<<","<<Harga<<'\n';
+        stud.close();
+        ManageData();        
+    }
+    if(pilihan=='y'){
+        stud<<ID<<","<<Nama<<","<<Brand<<","<<TahunTerbit<<","<<Harga<<'\n';
+        stud.close();
         ManageData();
     }
 }
@@ -870,7 +886,7 @@ void SortingData(){
         gotoxy(19,8 + i); std::cout << Mobil[i].Nama;
         gotoxy(44,8 + i); std::cout << Mobil[i].Brand;
         gotoxy(56,8 + i); std::cout << Mobil[i].Tahun;
-        gotoxy(66,8 + i); std::cout << Mobil[i].Harga << "000";
+        gotoxy(66,8 + i); std::cout << Mobil[i].Harga;
     }
     getchar();
     gotoxy(4,12 + dr - 1); std::cout << "> "; getchar();
@@ -907,7 +923,7 @@ void ShowData(){
         gotoxy(19,8 + j); std::cout << i.Nama;
         gotoxy(44,8 + j); std::cout << i.Brand;
         gotoxy(56,8 + j); std::cout << i.Tahun;
-        gotoxy(66,8 + j); std::cout << i.Harga << "000";
+        gotoxy(66,8 + j); std::cout << i.Harga;
         j++;
     }
     
@@ -935,30 +951,36 @@ void DeleteData(){
     std::string id;
     std::cin.ignore(); gotoxy(4,22);
     std::getline(std::cin, id);
-    for( auto i : datas){
-        if(i.ID == id){
+    int j = 0;
+    for(int i = 0; i != datas.size(); i++){
+        if(datas[i].ID == id){
+            j=i;
             gotoxy(5,10); std::cout << "ID      : ";
-            std::cout << i.ID;
+            std::cout << datas[i].ID;
             gotoxy(5,11); std::cout << "Nama    : ";
-            std::cout << i.Nama;
+            std::cout << datas[i].Nama;
             gotoxy(5,12); std::cout << "Brand   : ";
-            std::cout << i.Brand;
+            std::cout << datas[i].Brand;
             gotoxy(5,13); std::cout << "Tahun   : ";
-            std::cout << i.Tahun;
+            std::cout << datas[i].Tahun;
             gotoxy(5,14); std::cout << "Harga   : ";
-            std::cout << i.Harga;
+            std::cout << datas[i].Harga;
             gotoxy(4,22); system("pause");
-            getchar();
-        }
-        if(i.ID != id){
-            os << i.ID << "," ;
-            os<< i.Nama << ",";
-            os<< i.Brand << ",";
-            os<< i.Tahun << ",";
-            os<< i.Harga << "\n";
+            // for(auto j: datas){
+            //     std::cout << j.ID << '\n';
+            // }
+            goto store;
         }
     }
-
+    store:
+    datas.erase(datas.begin() + j);
+    for(auto j : datas){
+        os << j.ID << ",";
+        os << j.Nama << ",";
+        os << j.Brand << ",";
+        os << j.Tahun << ",";
+        os << j.Harga << "\n";
+    }
     os.close();
     remove("databases/items.txt");
     rename("databases/temps.txt", "databases/items.txt");
