@@ -1,2 +1,4 @@
 Vito Nur Ariyanto,Bantul,HON04,Honda City,1
 Anselmus Rusdiatmaja,Bantul,TOY04,Toyota Camry,1
+Sumiyati,Wonosobo,CHE01,Chevrolet Spark,1
+Sumiyati,Wonosobo,TOY04,Toyota Fortuner,1

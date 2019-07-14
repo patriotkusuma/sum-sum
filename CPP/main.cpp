@@ -201,7 +201,7 @@ void ShowPembeli(){
 
 void SaveTransaction(std::vector<pembeli> buyers){
     std::fstream os;
-    os.open("transactions.txt", std::ios::app);
+    os.open("databases/transactions.txt", std::ios::app);
     DetailTransaction bayar;
     for(auto i : buyers){
         os  << i.Nama<<"," << i.Alamat <<","
@@ -458,11 +458,11 @@ void UpdateData(){
            
             std::string kode,nama,brand;
             int tahun,harga;
-            gotoxy(5,8); std::cout << "ID      : "; std::cout << Mobil[i].ID;
-            gotoxy(5,9); std::cout << "Nama    : "; std::cout << Mobil[i].Nama;
-            gotoxy(5,10); std::cout << "Merek   : "; std::cout << Mobil[i].Brand;
-            gotoxy(5,11); std::cout << "Tahun   : "; std::cout << Mobil[i].Tahun;
-            gotoxy(5,12); std::cout << "Harga   : "; std::cout << Mobil[i].Harga;
+            gotoxy(5,8); std::cout << "ID      : "; std::cout << Car[i].ID;
+            gotoxy(5,9); std::cout << "Nama    : "; std::cout << Car[i].Nama;
+            gotoxy(5,10); std::cout << "Merek   : "; std::cout << Car[i].Brand;
+            gotoxy(5,11); std::cout << "Tahun   : "; std::cout << Car[i].Tahun;
+            gotoxy(5,12); std::cout << "Harga   : "; std::cout << Car[i].Harga;
             getchar();
             gotoxy(4,22);
             system("pause");
@@ -515,7 +515,8 @@ void UpdateData(){
     gotoxy(4,20); std::cout << "Tekan Enter untuk Kembali";
     gotoxy(4,22);
     std::cin.ignore();
-    std::ofstream os("databases/temps.txt");
+    remove("databases/items.txt");
+    std::ofstream os("databases/items.txt");
     for(int i = 0; i != temp; i++){
         os << Car[i].ID << ",";
         os << Car[i].Nama << ",";
@@ -524,8 +525,7 @@ void UpdateData(){
         os << Car[i].Harga << std::endl;
     }
     os.close(); 
-    remove("databases/items.txt");
-    rename("databases/temps.txt", "databases/items.txt");
+    // rename("databases/temps.txt", "databases/items.txt");
     ManageData();
     
     
@@ -940,10 +940,9 @@ void ShowData(){
 void DeleteData(){
     datas.clear();
     system("cls");
-
-    std::ofstream os;
-    os.open ("databases/temps.txt");
     LoadData();
+
+   
     draw();
     Tittle();
     gotoxy(4,6); std::cout << "MENU DELETE DATA";
@@ -975,6 +974,9 @@ void DeleteData(){
         }
     }
     store:
+    std::ofstream os;
+    remove("databases/items.txt");
+    os.open ("databases/items.txt");
     datas.erase(datas.begin() + j);
     for(auto j : datas){
         os << j.ID << ",";
@@ -984,8 +986,7 @@ void DeleteData(){
         os << j.Harga << "\n";
     }
     os.close();
-    remove("databases/items.txt");
-    rename("databases/temps.txt", "databases/items.txt");
+    // rename("databases/temps.txt", "databases/items.txt");
     system("cls");
     draw();
     Tittle();
@@ -1073,7 +1074,7 @@ void gotoxy(int x, int y){
     SetConsoleCursorPosition(console,CursorPosition);
 }
 
-void TransactionFromQueue(std::string nama, std::string alamat){
+void TransactionFromQueue(std::string NM, std::string addrs){
     LoadData();
     system("cls");
     DrawForm();
@@ -1084,8 +1085,11 @@ void TransactionFromQueue(std::string nama, std::string alamat){
     int j =0;
     gotoxy(45, 2); std::cout << "NAMA   : ";
     gotoxy(45, 3); std::cout << "Alamat : ";
-    gotoxy(53, 2); std::cout << nama;
-    gotoxy(53, 3); std::cout << alamat;
+    gotoxy(53, 2); std::cout << NM;
+    gotoxy(53, 3); std::cout << addrs;
+    std::string nama, alamat;
+    nama = NM;
+    alamat = addrs;
     int i=0;
     while(true){
         for(auto d:details){
