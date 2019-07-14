@@ -218,8 +218,8 @@ void PrintBill(std::vector<DetailTransaction> details){
     os << "(|********************************************|)" << std::endl;
 	os << "(|--------------------------------------------|)" << std::endl;
 	os << "(|    +                                  +    |)" << std::endl;
-	os << "(|    +	  ------ Delaer  Yu-Sum ------   +    |)" << std::endl;
-	os << "(|    +	  -------- YOGYAKARTA --------   +    |)" << std::endl;
+	os << "(|    +	 ------ SUM-SUM DEALER ------   +    |)" << std::endl;
+	os << "(|    +   -------- YOGYAKARTA --------   +    |)" << std::endl;
 	os << "(|    +                                  +    |)" << std::endl;
 	os << "(|--------------------------------------------|)" << std::endl;
 	
@@ -243,7 +243,7 @@ void PrintBill(std::vector<DetailTransaction> details){
 	os << std::setw(14) << "Total Harga :";
 	os <<std::setiosflags(std::ios::right)<< std::setw(10) << total << "   |)"<< std::endl <<std::resetiosflags(std::ios::right);
 	os << "(|--------------------------------------------|)" << std::endl;
-	os << "(|  Instagram : @YUSUM_FRUITS                 |)" << std::endl;
+	os << "(|  Instagram : @SUM-SUM_Dealer               |)" << std::endl;
 	os << "(|  Phone     : 0879837213475                 |)" <<std::endl;
 	os << "(|--------------------------------------------|)" << std::endl;
 	os << "(|    $--- Terima Kasih  Telah Mampir ---$    |)" << std::endl;
