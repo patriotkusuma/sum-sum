@@ -1098,9 +1098,6 @@ void TransactionFromQueue(std::string NM, std::string addrs){
     gotoxy(45, 3); std::cout << "Alamat : ";
     gotoxy(53, 2); std::cout << NM;
     gotoxy(53, 3); std::cout << addrs;
-    std::string nama, alamat;
-    nama = NM;
-    alamat = addrs;
     int i=0;
     while(true){
         for(auto d:details){
@@ -1118,6 +1115,7 @@ void TransactionFromQueue(std::string NM, std::string addrs){
 
         form:
         gotoxy(4,8 + j); std::string id;
+        std::cin.ignore();
         std::getline(std::cin, id);
         if(id == "!")
             return;
@@ -1151,7 +1149,7 @@ void TransactionFromQueue(std::string NM, std::string addrs){
             qty = stod(in_qty);
         
         details.push_back({{i.ID, i.Nama, i.Brand, i.Tahun, i.Harga}, qty});
-        buyers.push_back({{{i.ID, i.Nama,i.Brand,i.Tahun,i.Harga}, qty,}, nama, alamat});
+        buyers.push_back({{{i.ID, i.Nama,i.Brand,i.Tahun,i.Harga}, qty,}, NM, addrs});
         j++;
     }
 
