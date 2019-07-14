@@ -43,4 +43,3 @@ MRS02,Suzuki Alto,Maruti Suzuki,1979,250000
 MTS01,Mitsubishi Xpander,Mitsubishi,2013,200000
 MTS02,Mitsubishi Pajero Sport,Mitsubishi,2011,250000
 MTS03,Mitsubishi Delica,Mitsubishi,2005,400000
-
