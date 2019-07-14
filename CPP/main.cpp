@@ -399,6 +399,7 @@ void LoadData(){
 
 void UpdateData(){
     // datas.clear();
+    data Car[SIZE];
     system("cls");
     // LoadData();
     draw();
@@ -413,26 +414,26 @@ void UpdateData(){
         int begin = 0;
         int pos = item.find(",");
         std::string id = item.substr(begin, pos);
-        Mobil[i].ID = id;
+        Car[i].ID = id;
 
         begin = pos + 1;
         pos = item.find(",", begin);
         std::string barang = item.substr(begin, pos - begin);
-        Mobil[i].Nama = barang; 
+        Car[i].Nama = barang; 
 
         begin = pos + 1;
         pos = item.find(",", begin);
         std::string merek = item.substr(begin, pos - begin);
-        Mobil[i].Brand = merek;
+        Car[i].Brand = merek;
 
         begin = pos + 1;
         pos = item.find(",", begin);
         std::string year = item.substr(begin, pos - begin);
-        Mobil[i].Tahun = stoi(year);
+        Car[i].Tahun = stoi(year);
 
         begin = pos + 1;
         std::string price = item.substr(begin);
-        Mobil[i].Harga = stod(price);   
+        Car[i].Harga = stod(price);   
         temp++;
         i++;
     }
@@ -453,7 +454,7 @@ void UpdateData(){
     else{
 
     for(int i = 0; i!=temp; i++){
-        if(Mobil[i].ID == id){
+        if(Car[i].ID == id){
            
             std::string kode,nama,brand;
             int tahun,harga;
@@ -484,11 +485,11 @@ void UpdateData(){
             gotoxy(15,10); std::getline(std::cin, brand);
             gotoxy(15,11); std::cin >> tahun;
             gotoxy(15,12); std::cin >> harga;
-            Mobil[i].ID = kode;
-            Mobil[i].Nama = nama;
-            Mobil[i].Brand = brand;
-            Mobil[i].Tahun = tahun;
-            Mobil[i].Harga = harga;
+            Car[i].ID = kode;
+            Car[i].Nama = nama;
+            Car[i].Brand = brand;
+            Car[i].Tahun = tahun;
+            Car[i].Harga = harga;
 
         }
         // else if(Mobil[i].ID != id){
@@ -516,13 +517,14 @@ void UpdateData(){
     std::cin.ignore();
     std::ofstream os("databases/temps.txt");
     for(int i = 0; i != temp; i++){
-        os << Mobil[i].ID << ",";
-        os << Mobil[i].Nama << ",";
-        os << Mobil[i].Brand << ",";
-        os << Mobil[i].Tahun << ",";
-        os << Mobil[i].Harga << std::endl;
+        os << Car[i].ID << ",";
+        os << Car[i].Nama << ",";
+        os << Car[i].Brand << ",";
+        os << Car[i].Tahun << ",";
+        os << Car[i].Harga << std::endl;
     }
-    os.close(); remove("databases/items.txt");
+    os.close(); 
+    remove("databases/items.txt");
     rename("databases/temps.txt", "databases/items.txt");
     ManageData();
     
