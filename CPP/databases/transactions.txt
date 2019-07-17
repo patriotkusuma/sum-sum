@@ -4,3 +4,5 @@ Sumiyati,Wonosobo,CHE01,Chevrolet Spark,1
 Sumiyati,Wonosobo,TOY04,Toyota Fortuner,1
 Patriot Kusuma Sejati,Bantul,LM001,Lamborghini Gallardo,1
 Yusuf,Arab,LM001,Lamborghini Gallardo,1
+Lucinta Luna,Jakarta,HON04,Honda City,1
+Awkarin,Jakarta,TOY04,Toyota Fortuner,1

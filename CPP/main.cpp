@@ -885,7 +885,7 @@ void SortingData(){
     data swap;
     for(n = 0; n<temp-1 ;n++ ){
         for(m=0; m<temp -1; m++){
-            if(Mobil[m].Brand > Mobil[m+1].Brand){
+            if(Mobil[m].Harga > Mobil[m+1].Harga){
                 swap = Mobil[m];
                 Mobil[m]=Mobil[m+1];
                 Mobil[m+1] = swap;
